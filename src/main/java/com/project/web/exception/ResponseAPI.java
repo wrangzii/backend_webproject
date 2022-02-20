@@ -42,7 +42,7 @@ public class ResponseAPI implements Serializable {
         return new ResponseAPI("Not found!" ,message);
     }
 
-    public static ResponseAPI ok(Object data) {
+    public static ResponseAPI ok(Object data, String message) {
         return new ResponseAPI(data);
     }
 

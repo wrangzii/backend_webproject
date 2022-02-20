@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost:1433;database=practice1
+    url: jdbc:sqlserver://localhost:1433;database=collecting_ideas_project
     username: sa
     password: Password.1
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
@@ -11,3 +11,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+project:
+  web:
+    jwtSecret: projectWebSecretKey
+    jwtExpirationMs: 86400000
