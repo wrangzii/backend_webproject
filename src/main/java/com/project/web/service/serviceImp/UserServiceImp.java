@@ -12,7 +12,7 @@ import com.project.web.repository.UserRepository;
 import com.project.web.security.jwt.JwtUtils;
 import com.project.web.security.service.UserDetailsImpl;
 import com.project.web.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,18 +29,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImp implements UserService {
-    @Autowired
-    UserRepository userRepo;
-    @Autowired
-    RoleRepository roleRepo;
-    @Autowired
-    PasswordEncoder encoder;
-    @Autowired
-    AuthenticationManager authenticationManager;
-    @Autowired
-    JwtUtils jwtUtils;
-
+    private final UserRepository userRepo;
+    private final RoleRepository roleRepo;
+    private final PasswordEncoder encoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
     @Override
     public List<User> getAllUser() {
@@ -123,8 +118,12 @@ public class UserServiceImp implements UserService {
 
     @Override
     public ResponseEntity<MessageResponse> deleteUser(Long id) {
-        userRepo.deleteById(id);
-        return ResponseEntity.ok(new MessageResponse("Delete user successfully!"));
+        Optional<User> deleteUser = userRepo.findById(id);
+        if (deleteUser.isPresent()) {
+            userRepo.deleteById(id);
+            return ResponseEntity.ok(new MessageResponse("Delete user successfully!"));
+        }
+        return ResponseEntity.badRequest().body(new MessageResponse("User is not exist"));
     }
 
     @Override

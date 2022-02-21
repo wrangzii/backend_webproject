@@ -6,6 +6,7 @@ import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
 import com.project.web.payload.response.MessageResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
