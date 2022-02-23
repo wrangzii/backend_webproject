@@ -2,10 +2,9 @@ package com.project.web.controller;
 
 import com.project.web.model.Department;
 import com.project.web.payload.response.MessageResponse;
-import com.project.web.repository.DepartmentRepository;
 import com.project.web.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/department")
+@Slf4j
 public class DepartmentController {
     private final DepartmentService departmentSer;
 

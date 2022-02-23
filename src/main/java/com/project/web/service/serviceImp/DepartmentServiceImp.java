@@ -1,7 +1,6 @@
 package com.project.web.service.serviceImp;
 
 import com.project.web.model.Department;
-import com.project.web.model.User;
 import com.project.web.payload.response.MessageResponse;
 import com.project.web.repository.DepartmentRepository;
 import com.project.web.service.DepartmentService;

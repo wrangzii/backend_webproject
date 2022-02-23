@@ -13,6 +13,7 @@ import com.project.web.security.jwt.JwtUtils;
 import com.project.web.security.service.UserDetailsImpl;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImp implements UserService {
     private final UserRepository userRepo;
     private final RoleRepository roleRepo;
@@ -96,7 +100,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<JwtResponse> login(LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> login(LoginRequest loginRequest, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -106,6 +110,12 @@ public class UserServiceImp implements UserService {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+        Cookie cookie = new Cookie("token", jwt);
+        cookie.setPath("/");
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+        response.addHeader("Authorization",jwt);
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getUserId(),
                 userDetails.getUsername(),

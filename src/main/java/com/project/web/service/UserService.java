@@ -6,14 +6,14 @@ import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
 import com.project.web.payload.response.MessageResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
     List<User> getAllUser();
     ResponseEntity<MessageResponse> addUser(SignupRequest signupRequest);
-    ResponseEntity<JwtResponse> login(LoginRequest loginRequest);
+    ResponseEntity<JwtResponse> login(LoginRequest loginRequest, HttpServletResponse response);
     ResponseEntity<MessageResponse> deleteUser(Long id);
     ResponseEntity<MessageResponse> updateUser(User user, Long id);
 }
