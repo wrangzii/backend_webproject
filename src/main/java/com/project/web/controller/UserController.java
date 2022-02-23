@@ -4,7 +4,7 @@ import com.project.web.model.User;
 import com.project.web.payload.request.LoginRequest;
 import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
-import com.project.web.payload.response.MessageResponse;
+import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,17 +26,17 @@ public class UserController {
         return userSer.login(loginRequest,response);
     }
     @PostMapping("/register")
-    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<ResponseObject> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         return userSer.addUser(signUpRequest);
     }
 
     @DeleteMapping("/user/delete/{id}")
-    public ResponseEntity<MessageResponse> deleteUser(@PathVariable Long id){
+    public ResponseEntity<ResponseObject> deleteUser(@PathVariable Long id){
         return userSer.deleteUser(id);
     }
 
     @PutMapping("/user/edit/{id}")
-    public ResponseEntity<MessageResponse> updateUser(@Valid @RequestBody  User user, @PathVariable Long id){
+    public ResponseEntity<ResponseObject> updateUser(@Valid @RequestBody  User user, @PathVariable Long id){
         return  userSer.updateUser(user,id);
     }
 

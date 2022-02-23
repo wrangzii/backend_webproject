@@ -1,10 +1,11 @@
 package com.project.web.service.serviceImp;
 
 import com.project.web.model.Department;
-import com.project.web.payload.response.MessageResponse;
+import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.DepartmentRepository;
 import com.project.web.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,33 +23,33 @@ public class DepartmentServiceImp implements DepartmentService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> addDepartment(Department department) {
+    public ResponseEntity<ResponseObject> addDepartment(Department department) {
         Boolean checkExisted = departmentRepo.existsByDepartmentName(department.getDepartmentName());
         if (!checkExisted) {
             departmentRepo.save(department);
-            return ResponseEntity.ok(new MessageResponse("Add department successfully!"));
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Add department successfully!",department));
         }
-        return ResponseEntity.badRequest().body(new MessageResponse("Error: Department name is already taken!"));
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Department name is already taken!"));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> deleteDepartment(Long id) {
+    public ResponseEntity<ResponseObject> deleteDepartment(Long id) {
         Optional<Department> deleteDepartment = departmentRepo.findById(id);
         if (deleteDepartment.isPresent()) {
             departmentRepo.deleteById(id);
-            return ResponseEntity.ok(new MessageResponse("Delete department successfully!"));
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Delete department successfully!"));
         }
-        return ResponseEntity.badRequest().body(new MessageResponse("Error: Department name is not exist!"));
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Department name is not exist!"));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> editDepartment(Department department, Long id) {
+    public ResponseEntity<ResponseObject> editDepartment(Department department, Long id) {
         Optional<Department> editDepartment = departmentRepo.findById(id);
         if (editDepartment.isPresent()) {
             editDepartment.get().setDepartmentName(department.getDepartmentName());
             departmentRepo.save(editDepartment.get());
-            return ResponseEntity.ok(new MessageResponse("Edit user successfully!"));
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Edit Department successfully!",editDepartment));
         }
-        return ResponseEntity.badRequest().body(new MessageResponse("Error: Department is not exist!"));
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Department is not exist!"));
     }
 }

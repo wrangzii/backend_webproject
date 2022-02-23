@@ -1,7 +1,7 @@
 package com.project.web.controller;
 
 import com.project.web.model.Department;
-import com.project.web.payload.response.MessageResponse;
+import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +24,17 @@ public class DepartmentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<MessageResponse> addDepartment(@Valid @RequestBody Department department) {
+    public ResponseEntity<ResponseObject> addDepartment(@Valid @RequestBody Department department) {
         return departmentSer.addDepartment(department);
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<MessageResponse> editDepartment(@Valid @RequestBody Department department, @PathVariable Long id) {
+    public ResponseEntity<ResponseObject> editDepartment(@Valid @RequestBody Department department, @PathVariable Long id) {
         return departmentSer.editDepartment(department,id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<MessageResponse> deleteDepartment(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> deleteDepartment(@PathVariable Long id) {
         return departmentSer.deleteDepartment(id);
     }
 }

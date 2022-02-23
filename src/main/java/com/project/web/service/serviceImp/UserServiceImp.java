@@ -6,7 +6,7 @@ import com.project.web.model.User;
 import com.project.web.payload.request.LoginRequest;
 import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
-import com.project.web.payload.response.MessageResponse;
+import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.RoleRepository;
 import com.project.web.repository.UserRepository;
 import com.project.web.security.jwt.JwtUtils;
@@ -14,6 +14,7 @@ import com.project.web.security.service.UserDetailsImpl;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,16 +48,16 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> addUser(SignupRequest signUpRequest){
+    public ResponseEntity<ResponseObject> addUser(SignupRequest signUpRequest){
         if (userRepo.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Error: Username is already taken!"));
         }
         if (userRepo.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Email is already in use!"));
         }
         // Create new user's account
         User user = new User(signUpRequest.getEmail()
@@ -96,7 +97,7 @@ public class UserServiceImp implements UserService {
         }
         user.setRoles(roles);
         userRepo.save(user);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"User registered successfully!", user));
     }
 
     @Override
@@ -127,17 +128,17 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> deleteUser(Long id) {
+    public ResponseEntity<ResponseObject> deleteUser(Long id) {
         Optional<User> deleteUser = userRepo.findById(id);
         if (deleteUser.isPresent()) {
             userRepo.deleteById(id);
-            return ResponseEntity.ok(new MessageResponse("Delete user successfully!"));
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Delete user successfully!"));
         }
-        return ResponseEntity.badRequest().body(new MessageResponse("User is not exist"));
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.NOT_FOUND.toString(),"User is not exist"));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> updateUser(User user, Long id) {
+    public ResponseEntity<ResponseObject> updateUser(User user, Long id) {
         Optional<User> editUser = userRepo.findById(id);
         if (editUser.isPresent()){
             editUser.get().setDepartmentId(user.getDepartmentId());
@@ -150,8 +151,8 @@ public class UserServiceImp implements UserService {
             editUser.get().setRoles(user.getRoles());
 
             userRepo.save(editUser.get());
-            return ResponseEntity.ok(new MessageResponse("Edit user successfully!"));
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(), "Edit user successfully!", editUser));
         }
-        return null;
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.NOT_FOUND.toString(),"User is not exist"));
     }
 }

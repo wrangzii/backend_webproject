@@ -3,9 +3,10 @@ package com.project.web.controller;
 import com.project.web.payload.request.LoginRequest;
 import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
-import com.project.web.payload.response.MessageResponse;
+import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,15 +28,15 @@ public class AuthController {
         return userSer.login(loginRequest,response);
     }
     @PostMapping("/register")
-    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<ResponseObject> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         return userSer.addUser(signUpRequest);
     }
     @PostMapping("/logout")
-    public MessageResponse logoutPage(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseObject logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return new MessageResponse("Logout successfully!");
+       return new ResponseObject(HttpStatus.OK.toString(),"Logout successfully!");
     }
 }
