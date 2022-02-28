@@ -1,5 +1,6 @@
 spring:
   datasource:
+    initialization-mode : always
     url: jdbc:sqlserver://localhost:1433;database=collecting_ideas_project
     username: sa
     password: Password.1
@@ -11,7 +12,18 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    username: duynh120600@gmail.com
+    password: duyduy07
+    port: 587
+    properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
 project:
   web:
     jwtSecret: projectWebSecretKey
-    jwtExpirationMs: 86400000
+    jwtExpirationMs: 900000

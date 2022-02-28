@@ -2,6 +2,7 @@ package com.project.web.payload.response;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -12,12 +13,12 @@ public class JwtResponse {
     private String username;
     private String email;
     private String phoneNumber;
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private String fullName;
     private List<String> roles;
 
     public JwtResponse(String accessToken, Long id, String username, String email,
-                       String phoneNumber, String dateOfBirth, String fullName,List<String> roles) {
+                       String phoneNumber, Date dateOfBirth, String fullName, List<String> roles) {
         this.token = accessToken;
         this.id = id;
         this.username = username;

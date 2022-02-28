@@ -19,12 +19,12 @@ public class UserDetailsImpl implements UserDetails{
     private String username;
     private String email;
     private String phoneNumber;
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private String fullName;
     @JsonIgnore
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-    public UserDetailsImpl(Long userId, String username, String email, String password, String phoneNumber, String dateOfBirth, String fullName,
+    public UserDetailsImpl(Long userId, String username, String email, String password, String phoneNumber, Date dateOfBirth, String fullName,
                            Collection<? extends GrantedAuthority> authorities) {
         this.userId = userId;
         this.username = username;
@@ -65,7 +65,7 @@ public class UserDetailsImpl implements UserDetails{
         return phoneNumber;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 

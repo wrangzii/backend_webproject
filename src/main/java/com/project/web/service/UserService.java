@@ -16,4 +16,7 @@ public interface UserService {
     ResponseEntity<JwtResponse> login(LoginRequest loginRequest, HttpServletResponse response);
     ResponseEntity<ResponseObject> deleteUser(Long id);
     ResponseEntity<ResponseObject> updateUser(User user, Long id);
+    ResponseEntity<ResponseObject> forgotPassword(User user);
+    ResponseEntity<ResponseObject> resetUserPassword(User user, String confirmationToken);
+
 }

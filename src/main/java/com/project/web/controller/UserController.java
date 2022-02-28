@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/collecting_idea")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     private final UserService userSer;
 

@@ -2,8 +2,10 @@ package com.project.web.payload.response;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class ResponseObject {
+public class ResponseObject implements Serializable {
     private String status;
     private String message;
     private Object data;

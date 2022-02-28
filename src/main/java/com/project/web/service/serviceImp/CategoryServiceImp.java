@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
+    @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<ResponseObject> addCategory(Category category) {
         Boolean checkExisted = cateRepo.existsByCateName(category.getCateName());
         if (!checkExisted) {

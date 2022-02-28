@@ -26,15 +26,16 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.1.0.jre7'
+	implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.4.0.jre7'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 	implementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 	implementation('org.mockito:mockito-junit-jupiter:4.3.1')
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.6.2'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.6.3'
 	implementation 'javax.validation:validation-api:2.0.1.Final'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
 }
 
 tasks.named('test') {

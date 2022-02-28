@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(path = "/department")
 @Slf4j
+@CrossOrigin("http://localhost:3000")
 public class DepartmentController {
     private final DepartmentService departmentSer;
 

@@ -50,10 +50,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()    // set permission to access with jwt
+                .authorizeRequests().antMatchers("/login").permitAll()   // set permission to access with jwt
+                .antMatchers("/register").permitAll()
+                .antMatchers("/category/all").permitAll()
                 .antMatchers("/api/test/**").permitAll()
                 .antMatchers("/collecting_idea/**").permitAll()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/forgot_password").permitAll()
+                .antMatchers("/confirm_reset").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         http

@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/category")
 @Slf4j
+@CrossOrigin("http://localhost:3000")
 public class CategoryController {
     private final CategoryService cateSer;
 
