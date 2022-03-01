@@ -18,5 +18,4 @@ public interface UserService {
     ResponseEntity<ResponseObject> updateUser(User user, Long id);
     ResponseEntity<ResponseObject> forgotPassword(User user);
     ResponseEntity<ResponseObject> resetUserPassword(User user, String confirmationToken);
-
 }

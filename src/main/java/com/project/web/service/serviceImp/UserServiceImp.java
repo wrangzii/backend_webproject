@@ -44,17 +44,17 @@ public class UserServiceImp implements UserService {
 
     @Override
     public List<User> getAllUser() {
-        return userRepo.findAll();
+        return userRepo.getAllUser();
     }
 
     @Override
     public ResponseEntity<ResponseObject> addUser(SignupRequest signUpRequest){
-        if (userRepo.existsByUsername(signUpRequest.getUsername())) {
+        if (userRepo.findByUsername(signUpRequest.getUsername()).isPresent()) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(), "Error: Username is already taken!"));
         }
-        if (userRepo.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepo.findByEmail(signUpRequest.getEmail()).isPresent()) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Email is already in use!"));
@@ -96,6 +96,7 @@ public class UserServiceImp implements UserService {
             });
         }
         user.setRoles(roles);
+        user.setEnabled(true);
         userRepo.save(user);
         return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"User registered successfully!", user));
     }
@@ -149,8 +150,8 @@ public class UserServiceImp implements UserService {
             editUser.get().setPassword(user.getPassword());
             editUser.get().setDateOfBirth(user.getDateOfBirth());
             editUser.get().setPhoneNumber(user.getPhoneNumber());
+            editUser.get().setEnabled(true);
             editUser.get().setRoles(user.getRoles());
-
             userRepo.save(editUser.get());
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(), "Edit user successfully!", editUser));
         }
@@ -159,19 +160,19 @@ public class UserServiceImp implements UserService {
 
     @Override
     public ResponseEntity<ResponseObject> forgotPassword(User user) {
-        User existedUser = userRepo.findByEmailIgnoreCase(user.getEmail());
-        if (existedUser != null) {
+        Optional<User> existedUser = userRepo.findByEmail(user.getEmail());
+        if (existedUser.isPresent()) {
             // Save it
-            existedUser.setResetPasswordToken(UUID.randomUUID().toString());
-            userRepo.save(existedUser);
+            existedUser.get().setResetPasswordToken(UUID.randomUUID().toString());
+            userRepo.save(existedUser.get());
 
             // Create the email
             SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(existedUser.getEmail());
+            mailMessage.setTo(existedUser.get().getEmail());
             mailMessage.setSubject("Complete Password Reset!");
             mailMessage.setFrom("test-email@gmail.com");
             mailMessage.setText("To complete the password reset process, please click here: "
-                    + "http://localhost:8080/confirm_reset?token=" + existedUser.getResetPasswordToken());
+                    + "http://localhost:8080/confirm_reset?token=" + existedUser.get().getResetPasswordToken());
 
             // Send the email
             emailSenderService.sendEmail(mailMessage);
@@ -188,10 +189,12 @@ public class UserServiceImp implements UserService {
         User resetPasswordToken = userRepo.findByResetPasswordToken(confirmationToken);
 
         if (resetPasswordToken != null) {
-            User userReset = userRepo.findByEmail(resetPasswordToken.getEmail());
+            Optional<User> userReset = userRepo.findByEmail(resetPasswordToken.getEmail());
             // Use email to find user
-            userReset.setPassword(encoder.encode(user.getPassword()));
-            userRepo.save(userReset);
+            if (userReset.isPresent()) {
+                userReset.get().setPassword(encoder.encode(user.getPassword()));
+                userRepo.save(userReset.get());
+            }
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(), "Password successfully reset. You can now log in with the new credentials."));
         } else {
             return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.NOT_FOUND.toString(), "The link is invalid or broken!"));
