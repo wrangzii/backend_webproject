@@ -1,31 +1,24 @@
 package com.project.web.controller;
 
 import com.project.web.model.User;
-import com.project.web.payload.request.LoginRequest;
 import com.project.web.payload.request.SignupRequest;
-import com.project.web.payload.response.JwtResponse;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/collecting_idea")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 @CrossOrigin("http://localhost:3000")
 public class UserController {
     private final UserService userSer;
 
-    @PostMapping("/login")
-    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        return userSer.login(loginRequest,response);
-    }
-    @PostMapping("/register")
+    @PostMapping("/add")
     public ResponseEntity<ResponseObject> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         return userSer.addUser(signUpRequest);
     }
@@ -40,7 +33,7 @@ public class UserController {
         return  userSer.updateUser(user,id);
     }
 
-    @GetMapping("/user")
+    @GetMapping("/")
     public List<User> getAllUser() {
         return userSer.getAllUser();
     }

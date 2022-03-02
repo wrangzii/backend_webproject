@@ -2,7 +2,6 @@ package com.project.web.controller;
 
 import com.project.web.model.User;
 import com.project.web.payload.request.LoginRequest;
-import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.UserService;
@@ -28,11 +27,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         return userSer.login(loginRequest,response);
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<ResponseObject> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        return userSer.addUser(signUpRequest);
     }
 
     @PostMapping("/logout")
