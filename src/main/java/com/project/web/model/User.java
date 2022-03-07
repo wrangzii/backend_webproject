@@ -40,12 +40,11 @@ public class User {
     private Boolean enabled;
     private String resetPasswordToken;
 
-    public User(String email, String username, String fullName, String phoneNumber, Date dateOfBirth, Department departmentId, String password) {
+    public User(String email, String username, String fullName, String phoneNumber, Date dateOfBirth, String password) {
         this.username = username;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
-        this.departmentId = departmentId;
         this.password = password;
         this.email = email;
     }

@@ -1,5 +1,6 @@
 package com.project.web.service.serviceImp;
 
+import com.project.web.model.Department;
 import com.project.web.model.ERole;
 import com.project.web.model.Role;
 import com.project.web.model.User;
@@ -62,7 +63,7 @@ public class UserServiceImp implements UserService {
         // Create new user's account
         User user = new User(signUpRequest.getEmail()
                 , signUpRequest.getUsername(), signUpRequest.getFullName(), signUpRequest.getPhoneNumber()
-                , signUpRequest.getDateOfBirth(), signUpRequest.getDepartmentId()
+                , signUpRequest.getDateOfBirth()
                 , encoder.encode(signUpRequest.getPassword()));
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -95,8 +96,12 @@ public class UserServiceImp implements UserService {
                 }
             });
         }
+        Department department = new Department();
+        department.setDepartmentId(signUpRequest.getDepartmentId());
+        user.setDepartmentId(department);
         user.setRoles(roles);
         user.setEnabled(true);
+        //user.setDepartmentId(signUpRequest.getDepartmentId());
         userRepo.save(user);
         return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"User registered successfully!", user));
     }

@@ -1,6 +1,5 @@
 package com.project.web.payload.request;
 
-import com.project.web.model.Department;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -22,7 +21,7 @@ public class SignupRequest {
     private String phoneNumber;
     private Date dateOfBirth;
     private String fullName;
-    private Department departmentId;
+    private Long departmentId;
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
