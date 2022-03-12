@@ -67,35 +67,7 @@ public class UserServiceImp implements UserService {
                 , encoder.encode(signUpRequest.getPassword()));
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
-        if (strRoles == null) {
-            Role userRole = roleRepo.findByRoleName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepo.findByRoleName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                        break;
-                    case "qa_manager":
-                        Role qaManagerRole = roleRepo.findByRoleName(ERole.ROLE_QA_MANAGER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(qaManagerRole);
-                        break;
-                    case "qa_coordinator":
-                        Role qaCoordinatorRole = roleRepo.findByRoleName(ERole.ROLE_QA_COORDINATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(qaCoordinatorRole);
-                        break;
-                    default:
-                        Role userRole = roleRepo.findByRoleName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
+        validateRole(strRoles, roles);
         Department department = new Department();
         department.setDepartmentId(signUpRequest.getDepartmentId());
         user.setDepartmentId(department);
@@ -145,18 +117,23 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> updateUser(User user, Long id) {
+    public ResponseEntity<ResponseObject> updateUser(SignupRequest user, Long id) {
         Optional<User> editUser = userRepo.findById(id);
         if (editUser.isPresent()){
-            editUser.get().setDepartmentId(user.getDepartmentId());
             editUser.get().setEmail(user.getEmail());
             editUser.get().setUsername(user.getUsername());
             editUser.get().setFullName(user.getFullName());
-            editUser.get().setPassword(user.getPassword());
+            editUser.get().setPassword(encoder.encode(user.getPassword()));
             editUser.get().setDateOfBirth(user.getDateOfBirth());
             editUser.get().setPhoneNumber(user.getPhoneNumber());
             editUser.get().setEnabled(true);
-            editUser.get().setRoles(user.getRoles());
+            Department department = new Department();
+            department.setDepartmentId(user.getDepartmentId());
+            editUser.get().setDepartmentId(department);
+            Set<String> strRoles = user.getRole();
+            Set<Role> roles = new HashSet<>();
+            validateRole(strRoles, roles);
+            editUser.get().setRoles(roles);
             userRepo.save(editUser.get());
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(), "Edit user successfully!", editUser));
         }
@@ -203,6 +180,37 @@ public class UserServiceImp implements UserService {
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(), "Password successfully reset. You can now log in with the new credentials."));
         } else {
             return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.NOT_FOUND.toString(), "The link is invalid or broken!"));
+        }
+    }
+    private void validateRole(Set<String> strRoles, Set<Role> roles) {
+        if (strRoles.isEmpty()) {
+            Role userRole = roleRepo.findByRoleName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepo.findByRoleName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(adminRole);
+                        break;
+                    case "qa_manager":
+                        Role qaManagerRole = roleRepo.findByRoleName(ERole.ROLE_QA_MANAGER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(qaManagerRole);
+                        break;
+                    case "qa_coordinator":
+                        Role qaCoordinatorRole = roleRepo.findByRoleName(ERole.ROLE_QA_COORDINATOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(qaCoordinatorRole);
+                        break;
+                    default:
+                        Role userRole = roleRepo.findByRoleName(ERole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(userRole);
+                }
+            });
         }
     }
 }

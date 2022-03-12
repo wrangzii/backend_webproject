@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseObject> updateUser(@Valid @RequestBody  User user, @PathVariable Long id){
+    public ResponseEntity<ResponseObject> updateUser(@Valid @RequestBody  SignupRequest user, @PathVariable Long id){
         return  userSer.updateUser(user,id);
     }
 
