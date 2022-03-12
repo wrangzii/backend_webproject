@@ -23,12 +23,12 @@ public class UserController {
         return userSer.addUser(signUpRequest);
     }
 
-    @DeleteMapping("/user/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteUser(@PathVariable Long id){
         return userSer.deleteUser(id);
     }
 
-    @PutMapping("/user/edit/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<ResponseObject> updateUser(@Valid @RequestBody  User user, @PathVariable Long id){
         return  userSer.updateUser(user,id);
     }
