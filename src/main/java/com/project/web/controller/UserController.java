@@ -33,7 +33,7 @@ public class UserController {
         return  userSer.updateUser(user,id);
     }
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public List<User> getAllUser() {
         return userSer.getAllUser();
     }
