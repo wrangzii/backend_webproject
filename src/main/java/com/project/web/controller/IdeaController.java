@@ -1,12 +1,15 @@
 package com.project.web.controller;
 
 import com.project.web.model.Idea;
+import com.project.web.payload.request.SubmitIdeaRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.IdeaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,13 +23,13 @@ public class IdeaController {
     private final IdeaService ideaService;
 
     @GetMapping("/all")
-    public List<Idea> getAllIdea() {
-        return ideaService.getAllIdea();
-    }
+    public List<Idea> getAllIdea(@RequestParam(defaultValue = "0", required =false) Integer pageNumber) {return ideaService.getAllIdea(pageNumber);}
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseObject> addIdea(@Valid @RequestBody Idea idea) {
-        return ideaService.addIdea(idea);
+    @PostMapping(value = "/add",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE} )
+    public ResponseEntity<ResponseObject> addIdea(@Valid @ModelAttribute SubmitIdeaRequest idea, @RequestBody MultipartFile file) throws Exception {
+        return ideaService.addIdea(idea, file);
     }
 
     @PutMapping("/edit/{id}")

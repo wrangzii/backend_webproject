@@ -1,7 +1,7 @@
 package com.project.web.repository;
 
 import com.project.web.model.Idea;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface IdeaRepository extends JpaRepository<Idea, Long> {
+public interface IdeaRepository extends PagingAndSortingRepository<Idea, Long> {
 }

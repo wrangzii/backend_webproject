@@ -27,4 +27,6 @@ public class Idea {
     @JoinColumn(name = "submissionId")
     private Submission submissionId;
 
+    public Idea() {
+    }
 }
