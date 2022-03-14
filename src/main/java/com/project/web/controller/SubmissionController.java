@@ -24,6 +24,11 @@ public class SubmissionController {
         return submissionServ.getAllSubmission();
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<ResponseObject> getSubmissionById(@PathVariable Long id) {
+        return submissionServ.getSubmissionById(id);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ResponseObject> addSubmission(@Valid @RequestBody Submission submission) {
         return submissionServ.addSubmission(submission);

@@ -23,7 +23,12 @@ public class IdeaController {
     private final IdeaService ideaService;
 
     @GetMapping("/all")
-    public List<Idea> getAllIdea(@RequestParam(defaultValue = "0", required =false) Integer pageNumber) {return ideaService.getAllIdea(pageNumber);}
+    public List<Idea> getAllIdea(@RequestParam int pageNumber) {return ideaService.getAllIdea(pageNumber);}
+
+    @GetMapping("{id}")
+    public ResponseEntity<ResponseObject> getIdeaById(@PathVariable Long id) {
+        return ideaService.getIdeaById(id);
+    }
 
     @PostMapping(value = "/add",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
@@ -33,7 +38,7 @@ public class IdeaController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseObject> editIdea(@Valid @RequestBody Idea idea, @PathVariable Long id) {
+    public ResponseEntity<ResponseObject> editIdea(@Valid @ModelAttribute SubmitIdeaRequest idea, @PathVariable Long id) {
         return ideaService.editIdea(idea, id);
     }
     @DeleteMapping("/delete/{id}")

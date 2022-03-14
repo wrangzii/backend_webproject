@@ -37,7 +37,7 @@ public class IdeaServiceImp implements IdeaService {
     private final GoogleDriveService googleDriveServ;
 
     @Override
-    public List<Idea> getAllIdea(Integer pageNumber) {
+    public List<Idea> getAllIdea(int pageNumber) {
         int pageSize = 5;
         Pageable paging = PageRequest.of(pageNumber,pageSize);
 
@@ -48,6 +48,15 @@ public class IdeaServiceImp implements IdeaService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> getIdeaById(Long id) {
+        Optional<Idea> checkExisted= ideaRepo.findById(id);
+        if (checkExisted.isPresent()) {
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Get idea successfully!", checkExisted));
+        }
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: idea name is not exist!"));
     }
 
     @Override
@@ -99,13 +108,13 @@ public class IdeaServiceImp implements IdeaService {
         Optional<Idea> deleteIdea = ideaRepo.findById(id);
         if (deleteIdea.isPresent()) {
             ideaRepo.deleteById(id);
-            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Delete submission successfully!"));
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Delete idea successfully!"));
         }
-        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Submission name is not exist!"));
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: idea name is not exist!"));
     }
 
     @Override
-    public ResponseEntity<ResponseObject> editIdea(Idea idea, Long id) {
+    public ResponseEntity<ResponseObject> editIdea(SubmitIdeaRequest idea, Long id) {
         Optional<Idea> editIdea= ideaRepo.findById(id);
         if (editIdea.isPresent()) {
             editIdea.get().setTitle(idea.getTitle());

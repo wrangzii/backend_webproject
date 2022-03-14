@@ -75,7 +75,7 @@ public class FileService {
         if (folderId != null) {
             return folderId;
         }
-        //Folder dont exists, create it and return folderId
+        //Folder don't exist, create it and return folderId
         File fileMetadata = new File();
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
         fileMetadata.setName(folderName);

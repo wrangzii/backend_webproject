@@ -23,6 +23,15 @@ public class DepartmentServiceImp implements DepartmentService {
     }
 
     @Override
+    public ResponseEntity<ResponseObject> getDepartmentById(Long id) {
+        Optional<Department> checkExisted = departmentRepo.findById(id);
+        if (checkExisted.isPresent()) {
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Get department successfully!",checkExisted));
+        }
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Department name is already taken!"));
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> addDepartment(Department department) {
         Boolean checkExisted = departmentRepo.existsByDepartmentName(department.getDepartmentName());
         if (!checkExisted) {

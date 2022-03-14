@@ -9,8 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface IdeaService {
-    List<Idea> getAllIdea(Integer pageNumber);
+    List<Idea> getAllIdea(int pageNumber);
+    ResponseEntity<ResponseObject> getIdeaById(Long id);
     ResponseEntity<ResponseObject> addIdea(SubmitIdeaRequest idea, MultipartFile file) throws Exception;
     ResponseEntity<ResponseObject> deleteIdea(Long id);
-    ResponseEntity<ResponseObject> editIdea(Idea idea, Long id);
+    ResponseEntity<ResponseObject> editIdea(SubmitIdeaRequest idea, Long id);
 }

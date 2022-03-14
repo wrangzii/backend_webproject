@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface SubmissionService {
     List<Submission> getAllSubmission();
+    ResponseEntity<ResponseObject> getSubmissionById(Long id);
     ResponseEntity<ResponseObject> addSubmission(Submission submission);
     ResponseEntity<ResponseObject> deleteSubmission(Long id);
     ResponseEntity<ResponseObject> editSubmission(Submission submission, Long id);

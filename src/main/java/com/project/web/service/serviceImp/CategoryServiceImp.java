@@ -22,6 +22,15 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
+    public ResponseEntity<ResponseObject> getCateById(Long id) {
+        Optional<Category> checkExisted = cateRepo.findById(id);
+        if (checkExisted.isPresent()) {
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"Get category successfully!",checkExisted));
+        }
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Category name is already taken!"));
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> addCategory(Category category) {
         Boolean checkExisted = cateRepo.existsByCateName(category.getCateName());
         if (!checkExisted) {

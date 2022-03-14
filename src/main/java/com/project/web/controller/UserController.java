@@ -23,6 +23,11 @@ public class UserController {
         return userSer.addUser(signUpRequest);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<ResponseObject> getUserById(@PathVariable Long id) {
+        return userSer.getUserById(id);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteUser(@PathVariable Long id){
         return userSer.deleteUser(id);

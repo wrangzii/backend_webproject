@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface DepartmentService {
     List<Department> getAllDepartment();
+    ResponseEntity<ResponseObject> getDepartmentById(Long id);
     ResponseEntity<ResponseObject> addDepartment(Department department);
     ResponseEntity<ResponseObject> deleteDepartment(Long id);
     ResponseEntity<ResponseObject> editDepartment(Department department, Long id);

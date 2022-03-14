@@ -23,6 +23,15 @@ public class SubmissionServiceImp implements SubmissionService {
     }
 
     @Override
+    public ResponseEntity<ResponseObject> getSubmissionById(Long id) {
+        Optional<Submission> checkExisted = submissionRepo.findById(id);
+        if (checkExisted.isPresent()) {
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"Get submission successfully!", checkExisted));
+        }
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Submission name is already taken!"));
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> addSubmission(Submission submission) {
         Boolean checkExisted = submissionRepo.existsBySubmissionName(submission.getSubmissionName());
         if (!checkExisted) {

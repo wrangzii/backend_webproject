@@ -49,6 +49,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public ResponseEntity<ResponseObject> getUserById(Long id) {
+        Optional<User> existedUser = userRepo.findById(id);
+        if (existedUser.isPresent()) {
+            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Get user successfully!", existedUser));
+        }
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.NOT_FOUND.toString(),"User is not exist"));
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> addUser(SignupRequest signUpRequest){
         if (userRepo.findByUsername(signUpRequest.getUsername()).isPresent()) {
             return ResponseEntity

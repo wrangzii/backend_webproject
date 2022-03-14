@@ -24,6 +24,11 @@ public class CategoryController {
         return cateSer.getAllCategory();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getCateById(@PathVariable Long id) {
+        return cateSer.getCateById(id);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ResponseObject> addCategory(@Valid @RequestBody Category category) {
         return cateSer.addCategory(category);

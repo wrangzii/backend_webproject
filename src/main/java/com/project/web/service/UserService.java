@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface UserService {
     List<User> getAllUser();
+    ResponseEntity<ResponseObject> getUserById(Long id);
     ResponseEntity<ResponseObject> addUser(SignupRequest signupRequest);
     ResponseEntity<JwtResponse> login(LoginRequest loginRequest, HttpServletResponse response);
     ResponseEntity<ResponseObject> deleteUser(Long id);

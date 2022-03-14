@@ -24,6 +24,11 @@ public class DepartmentController {
         return departmentSer.getAllDepartment();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getDepartmentById(@PathVariable Long id) {
+        return departmentSer.getDepartmentById(id);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ResponseObject> addDepartment(@Valid @RequestBody Department department) {
         return departmentSer.addDepartment(department);
