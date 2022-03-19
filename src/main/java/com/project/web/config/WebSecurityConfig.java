@@ -52,7 +52,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/login").permitAll()   // set permission to access with jwt
                 .antMatchers("/confirm_reset").permitAll()
-                .antMatchers("/category/all").permitAll()
                 .antMatchers("/api/test/**").permitAll()
                 .antMatchers("/forgot_password").permitAll()
                 .antMatchers("/confirm_reset").permitAll()
