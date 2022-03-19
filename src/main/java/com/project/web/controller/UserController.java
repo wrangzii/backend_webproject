@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<User> getAllUser() {
-        return userSer.getAllUser();
+    public List<User> getAllUser(@RequestParam int pageNumber) {
+        return userSer.getAllUser(pageNumber);
     }
 }

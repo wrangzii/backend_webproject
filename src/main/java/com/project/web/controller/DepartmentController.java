@@ -20,8 +20,8 @@ public class DepartmentController {
     private final DepartmentService departmentSer;
 
     @GetMapping("/all")
-    public List<Department> getAllDepart() {
-        return departmentSer.getAllDepartment();
+    public List<Department> getAllDepart(@RequestParam int pageNumber) {
+        return departmentSer.getAllDepartment(pageNumber);
     }
 
     @GetMapping("/{id}")

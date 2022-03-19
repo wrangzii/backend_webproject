@@ -3,6 +3,7 @@ package com.project.web.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Data
@@ -12,6 +13,7 @@ public class Reaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reactionId;
+    @NotEmpty(message = "*Please provide reaction type")
     private String reactionType;
     private Date createDate;
     private Date lastModifyDate;

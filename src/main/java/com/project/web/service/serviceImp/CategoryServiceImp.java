@@ -5,10 +5,14 @@ import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.CategoryRepository;
 import com.project.web.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +21,16 @@ import java.util.Optional;
 public class CategoryServiceImp implements CategoryService {
     private final CategoryRepository cateRepo;
     @Override
-    public List<Category> getAllCategory() {
-        return cateRepo.findAll();
+    public List<Category> getAllCategory(int pageNumber) {
+        int pageSize = 10;
+        Pageable paging = PageRequest.of(pageNumber,pageSize);
+        Page<Category> pagedResult = cateRepo.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @Override

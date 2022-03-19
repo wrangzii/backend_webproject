@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface DepartmentService {
-    List<Department> getAllDepartment();
+    List<Department> getAllDepartment(int pageNumber);
     ResponseEntity<ResponseObject> getDepartmentById(Long id);
     ResponseEntity<ResponseObject> addDepartment(Department department);
     ResponseEntity<ResponseObject> deleteDepartment(Long id);

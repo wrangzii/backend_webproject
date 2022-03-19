@@ -20,8 +20,8 @@ public class SubmissionController {
     private final SubmissionService submissionServ;
 
     @GetMapping("/all")
-    public List<Submission> getAllSubmission() {
-        return submissionServ.getAllSubmission();
+    public List<Submission> getAllSubmission(@RequestParam int pageNumber) {
+        return submissionServ.getAllSubmission(pageNumber);
     }
 
     @GetMapping("{id}")

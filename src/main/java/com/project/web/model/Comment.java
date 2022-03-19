@@ -3,6 +3,7 @@ package com.project.web.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Data
@@ -12,7 +13,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long commentId;
-
+    @NotEmpty(message = "*Please provide content")
     private String content;
     private Date createDate;
     private Date lastModifyDate;

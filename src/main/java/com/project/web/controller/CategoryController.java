@@ -20,8 +20,8 @@ public class CategoryController {
     private final CategoryService cateSer;
 
     @GetMapping("/all")
-    public List<Category> getAllCategory() {
-        return cateSer.getAllCategory();
+    public List<Category> getAllCategory(@RequestParam int pageNumber) {
+        return cateSer.getAllCategory(pageNumber);
     }
 
     @GetMapping("/{id}")

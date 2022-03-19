@@ -3,6 +3,7 @@ package com.project.web.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
@@ -12,7 +13,9 @@ public class Idea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ideaId;
+    @NotEmpty(message = "*Please provide title")
     private String title;
+    @NotEmpty(message = "*Please provide description")
     private String description;
     private Date createDate;
     private Date lastModifyDate;

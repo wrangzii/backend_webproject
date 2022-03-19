@@ -1,9 +1,6 @@
 package com.project.web.service.serviceImp;
 
-import com.project.web.model.Department;
-import com.project.web.model.ERole;
-import com.project.web.model.Role;
-import com.project.web.model.User;
+import com.project.web.model.*;
 import com.project.web.payload.request.LoginRequest;
 import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
@@ -16,6 +13,9 @@ import com.project.web.service.EmailSenderService;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -44,8 +44,16 @@ public class UserServiceImp implements UserService {
     private final EmailSenderService emailSenderService;
 
     @Override
-    public List<User> getAllUser() {
-        return userRepo.getAllUser();
+    public List<User> getAllUser(int pageNumber) {
+        int pageSize = 10;
+        Pageable paging = PageRequest.of(pageNumber,pageSize);
+        Page<User> pagedResult = userRepo.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @Override

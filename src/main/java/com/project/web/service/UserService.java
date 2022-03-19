@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUser();
+    List<User> getAllUser(int pageNumber);
     ResponseEntity<ResponseObject> getUserById(Long id);
     ResponseEntity<ResponseObject> addUser(SignupRequest signupRequest);
     ResponseEntity<JwtResponse> login(LoginRequest loginRequest, HttpServletResponse response);
