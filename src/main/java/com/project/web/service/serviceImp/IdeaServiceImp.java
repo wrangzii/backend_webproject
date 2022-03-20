@@ -1,17 +1,11 @@
 package com.project.web.service.serviceImp;
 
-import com.google.api.client.http.InputStreamContent;
-import com.google.api.services.drive.model.File;
-import com.project.web.model.Category;
-import com.project.web.model.Idea;
-import com.project.web.model.Submission;
-import com.project.web.model.User;
+
+import com.project.web.model.*;
 import com.project.web.payload.request.SubmitIdeaRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.FileRepository;
 import com.project.web.repository.IdeaRepository;
-import com.project.web.service.FileService;
-import com.project.web.service.GoogleDriveService;
 import com.project.web.service.IdeaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,8 +27,8 @@ import java.util.Optional;
 public class IdeaServiceImp implements IdeaService {
     private final IdeaRepository ideaRepo;
     private final FileRepository fileRepo;
-    private final FileService fileService;
-    private final GoogleDriveService googleDriveServ;
+//    private final FileService fileService;
+//    private final GoogleDriveService googleDriveServ;
 
     @Override
     public List<Idea> getAllIdea(int pageNumber) {
@@ -64,20 +58,20 @@ public class IdeaServiceImp implements IdeaService {
         String filePath = idea.getCateId() + "_" + idea.getUserId();
         Idea addIdea = new Idea();
         File uploadFile = new File();
-        String folderId = fileService.getFolderId(filePath);
+        //String folderId = fileService.getFolderId(filePath);
         com.project.web.model.File fileModel = new com.project.web.model.File();
-        if (!file.isEmpty()) {
-            File fileMetadata = new File();
-            fileMetadata.setParents(Collections.singletonList(folderId));
-            fileMetadata.setName(file.getOriginalFilename());
-            uploadFile = googleDriveServ.getInstance()
-                    .files()
-                    .create(fileMetadata, new InputStreamContent(
-                            file.getContentType(),
-                            new ByteArrayInputStream(file.getBytes()))
-                    )
-                    .setFields("id").execute();
-        }
+//        if (!file.isEmpty()) {
+//            File fileMetadata = new File();
+//            fileMetadata.setParents(Collections.singletonList(folderId));
+//            fileMetadata.setName(file.getOriginalFilename());
+//            uploadFile = googleDriveServ.getInstance()
+//                    .files()
+//                    .create(fileMetadata, new InputStreamContent(
+//                            file.getContentType(),
+//                            new ByteArrayInputStream(file.getBytes()))
+//                    )
+//                    .setFields("id").execute();
+//        }
         Category cate = new Category();
         Submission submit = new Submission();
         User user = new User();
@@ -93,7 +87,7 @@ public class IdeaServiceImp implements IdeaService {
         addIdea.setSubmissionId(submit);
         addIdea.setUserId(user);
         ideaRepo.save(addIdea);
-        fileModel.setFilePath(uploadFile.getId());
+        //fileModel.setFilePath(uploadFile.getId());
         Idea idea1 = new Idea();
         idea1.setIdeaId(addIdea.getIdeaId());
         fileModel.setIdeaId(idea1);

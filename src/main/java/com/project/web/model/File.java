@@ -12,6 +12,7 @@ public class File{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
+    private String fileName;
     private String filePath;
     private Date createDate;
     private Date lastModifyDate;
