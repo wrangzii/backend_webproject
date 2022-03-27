@@ -1,5 +1,6 @@
 package com.project.web.service.serviceImp;
 
+import com.dropbox.core.DbxException;
 import com.project.web.model.Category;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.CategoryRepository;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,8 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImp implements CategoryService {
     private final CategoryRepository cateRepo;
+    private final DropboxService dropboxService;
+
     @Override
     public List<Category> getAllCategory(int pageNumber) {
         int pageSize = 10;
@@ -73,5 +78,15 @@ public class CategoryServiceImp implements CategoryService {
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Edit category successfully!",editCate));
         }
         return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Category is not exist!"));
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> downloadAllFileIdea(HttpServletResponse response, Long id) throws IOException, DbxException {
+        Optional<Category> categoryExists = cateRepo.findById(id);
+        if (categoryExists.isPresent()) {
+            dropboxService.downloadFile(response,"/" +  categoryExists.get().getCateName());
+            return ResponseEntity.ok().body(new ResponseObject("Download successfully!"));
+        }
+        return ResponseEntity.badRequest().body(new ResponseObject("Download fail!"));
     }
 }

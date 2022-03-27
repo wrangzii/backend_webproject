@@ -1,4 +1,4 @@
-package com.project.web.service;
+package com.project.web.service.serviceImp;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
@@ -6,23 +6,18 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.web.Utils.DropboxAction;
-import com.project.web.model.DropboxItem;
-import com.project.web.model.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URLEncoder;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,34 +54,12 @@ public class DropboxService {
         return result;
     }
 
-        public List<DropboxItem> getDropboxItems(String path) throws IOException, DbxException {
-        List<Metadata> entries = dropboxClient.files().listFolder(path).getEntries();
-        List<DropboxItem> result = new ArrayList<>();
-        entries.forEach(entry -> {
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> map = new HashMap<>();
-            try {
-                map = mapper.readValue(entry.toString(), new TypeReference<Map<String, Object>>(){});
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            DropboxItem item = new DropboxItem();
-            item.setId(map.get("id").toString());
-            item.setName(map.get("name").toString());
-            item.setPath(map.get("path_lower").toString());
-            result.add(item);
-        });
-        return result;
+    public void downloadFile(HttpServletResponse response, String filePath) throws IOException, DbxException {
+        OutputStream outputStream = new FileOutputStream(filePath);
+        dropboxClient.files().downloadZipBuilder("/" + filePath).download(outputStream);
     }
 
-    public void downloadFile(HttpServletResponse response, DropboxAction.Download download) throws IOException, DbxException {
-        ServletOutputStream outputStream = response.getOutputStream();
-        dropboxClient.files().downloadBuilder(download.getFilePath()).download(outputStream);
+    public void deleteFile(String filePath) throws DbxException {
+        dropboxClient.files().deleteV2(filePath);
     }
-
-    public void deleteFile(DropboxAction.Delete delete) throws DbxException {
-        dropboxClient.files().deleteV2(delete.getFilePath());
-    }
-
 }

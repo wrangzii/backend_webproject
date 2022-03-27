@@ -96,30 +96,34 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<JwtResponse> login(LoginRequest loginRequest, HttpServletResponse response) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-        Cookie cookie = new Cookie("token", jwt);
-        cookie.setPath("/");
-        cookie.setSecure(true);
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
-        response.addHeader("Authorization",jwt);
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getUserId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                userDetails.getPhoneNumber(),
-                userDetails.getDateOfBirth(),
-                userDetails.getFullName(),
-                roles));
+    public ResponseEntity<ResponseObject> login(LoginRequest loginRequest, HttpServletResponse response) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
+            JwtResponse userResponse = new JwtResponse(jwt,
+                    userDetails.getUserId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    userDetails.getPhoneNumber(),
+                    userDetails.getDateOfBirth(),
+                    userDetails.getFullName(),
+                    roles);
+            Cookie cookie = new Cookie("token", jwt);
+            cookie.setPath("/");
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+            response.addHeader("Authorization", jwt);
+            return ResponseEntity.ok(new ResponseObject(userResponse));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseObject(HttpStatus.UNAUTHORIZED.toString(),"Username or password is incorrect!"));
+        }
     }
 
     @Override

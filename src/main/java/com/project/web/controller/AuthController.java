@@ -2,7 +2,6 @@ package com.project.web.controller;
 
 import com.project.web.model.User;
 import com.project.web.payload.request.LoginRequest;
-import com.project.web.payload.response.JwtResponse;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class AuthController {
     private final UserService userSer;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<ResponseObject> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         return userSer.login(loginRequest,response);
     }
 

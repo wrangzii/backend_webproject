@@ -24,4 +24,8 @@ public class ResponseObject implements Serializable {
         this.status = status;
         this.message = message;
     }
+
+    public ResponseObject(Object data) {
+        this.data = data;
+    }
 }

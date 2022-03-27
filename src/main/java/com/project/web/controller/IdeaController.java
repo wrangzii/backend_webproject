@@ -1,5 +1,6 @@
 package com.project.web.controller;
 
+import com.dropbox.core.DbxException;
 import com.project.web.model.Idea;
 import com.project.web.payload.request.SubmitIdeaRequest;
 import com.project.web.payload.response.ResponseObject;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -38,11 +40,11 @@ public class IdeaController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseObject> editIdea(@Valid @ModelAttribute SubmitIdeaRequest idea, @PathVariable Long id) {
-        return ideaService.editIdea(idea, id);
+    public ResponseEntity<ResponseObject> editIdea(@Valid @ModelAttribute SubmitIdeaRequest idea, @RequestBody MultipartFile file, @PathVariable Long id) throws IOException, DbxException {
+        return ideaService.editIdea(idea, file, id);
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseObject> deleteIdea(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> deleteIdea(@PathVariable Long id) throws DbxException {
         return ideaService.deleteIdea(id);
     }
 }

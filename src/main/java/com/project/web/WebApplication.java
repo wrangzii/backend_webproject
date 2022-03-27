@@ -1,13 +1,11 @@
 package com.project.web;
 
-import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.project.web.config.WebConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
@@ -19,8 +17,8 @@ public class WebApplication {
 	}
 	@Bean("dropboxClient")
 	public DbxClientV2 dropboxClient() {
-		String ACCESS_TOKEN = "sl.BEKnUCX_C_R6gkUjXEj3FP_8MRhAtxhETF3Rna32mSP7hxWsvVpZlkTdjpuMYlebcnGoqxRIKGAHgrsmlY02j5VuOI_pXq-upVataedZHJXrUzwyatqYsWxClMPo8Yl9l8JTTfxn4cQ";
-		DbxRequestConfig config = new DbxRequestConfig("dropbox/test");
+		String ACCESS_TOKEN = "sl.BElsuosunxNTIoajTcMOJfx4DAb5ioiCvYKG3KSA0sdZZYc3JP0gURecPw2KSb4zAIkbnIogMxucqet3fHiygqBJTI1lPZ5w7bOXdTd0qxKAVswb4KNs03Q5dl4jo2ZfhybMY5kH";
+		DbxRequestConfig config = new DbxRequestConfig("/");
 		return new DbxClientV2(config, ACCESS_TOKEN);
 	}
 }
