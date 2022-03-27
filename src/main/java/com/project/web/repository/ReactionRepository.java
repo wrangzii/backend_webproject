@@ -1,13 +1,18 @@
 package com.project.web.repository;
 
+import com.project.web.model.Idea;
 import com.project.web.model.Reaction;
+import com.project.web.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
-    Boolean existsByReactionId(Long id);
     @Query(value = "SELECT * FROM reactions WHERE idea_id =?1", nativeQuery = true)
     List<Reaction> findByIdeaId(Long ideaId);
+    Boolean existsByReactionType(String type);
+    Optional<Reaction> findByUserId(User userId);
+    Boolean existsByIdeaId(Idea ideaId);
 }
