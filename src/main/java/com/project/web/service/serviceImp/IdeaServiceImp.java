@@ -5,10 +5,7 @@ import com.dropbox.core.DbxException;
 import com.project.web.model.*;
 import com.project.web.payload.request.SubmitIdeaRequest;
 import com.project.web.payload.response.ResponseObject;
-import com.project.web.repository.CategoryRepository;
-import com.project.web.repository.FileRepository;
-import com.project.web.repository.IdeaRepository;
-import com.project.web.repository.UserRepository;
+import com.project.web.repository.*;
 import com.project.web.service.IdeaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +30,8 @@ public class IdeaServiceImp implements IdeaService {
     private final FileRepository fileRepo;
     private final UserRepository userRepo;
     private final CategoryRepository categoryRepository;
+    private final SubmissionRepository submissionRepo;
+
     @Autowired
     DropboxService dropboxService;
 
@@ -61,45 +61,49 @@ public class IdeaServiceImp implements IdeaService {
     @Override
     public ResponseEntity<ResponseObject> addIdea(SubmitIdeaRequest idea, MultipartFile file) throws Exception {
         Optional<User> existedUser = userRepo.findById(idea.getUserId());
-        String filePath = "";
-        Optional<Category> category = categoryRepository.findById(idea.getCateId());
-        if (category.isPresent()) {
-            Idea addIdea = new Idea();
-            File fileModel = new File();
-            Category cate = new Category();
-            Submission submit = new Submission();
-            User user = new User();
-            if (existedUser.isPresent()) {
-                filePath = "/" + category.get().getCateName() + "/" + existedUser.get().getUsername() + "_idea" + "/" + existedUser.get().getEmail();
+        Optional<Submission> checkClosureDate = submissionRepo.findById(idea.getSubmissionId());
+        Date date = new Date();
+        if (checkClosureDate.isPresent())
+            if (checkClosureDate.get().getClosureDate().after(date)) {
+                String filePath = "";
+                Optional<Category> category = categoryRepository.findById(idea.getCateId());
+                if (category.isPresent()) {
+                    Idea addIdea = new Idea();
+                    File fileModel = new File();
+                    Category cate = new Category();
+                    Submission submit = new Submission();
+                    User user = new User();
+                    if (existedUser.isPresent()) {
+                        filePath = "/" + category.get().getCateName() + "/" + existedUser.get().getUsername() + "_idea" + "/" + existedUser.get().getEmail();
 //                dropboxService.createFolder(filePath, category.get().getCateName());
-                dropboxService.uploadFile(file, filePath);
-                user.setUserId(idea.getUserId());
-                cate.setCateId(idea.getCateId());
-                addIdea.setDescription(idea.getDescription());
-                addIdea.setTitle(idea.getTitle());
-                addIdea.setCateId(cate);
-                addIdea.setViewCount(idea.getViewCount());
-                addIdea.setCreateDate(idea.getCreateDate());
-                addIdea.setLastModifyDate(idea.getLastModifyDate());
-                submit.setSubmissionId(idea.getSubmissionId());
-                addIdea.setSubmissionId(submit);
-                addIdea.setUserId(user);
-                ideaRepo.save(addIdea);
-                Idea idea1 = new Idea();
-                idea1.setIdeaId(addIdea.getIdeaId());
-                fileModel.setIdeaId(idea1);
-                fileModel.setFileName(existedUser.get().getEmail());
-                fileModel.setFilePath(filePath);
-                fileModel.setCreateDate(idea.getCreateDate());
-                fileModel.setLastModifyDate(idea.getLastModifyDate());
-                fileModel.setIdeaId(idea1);
-                fileRepo.save(fileModel);
+                        dropboxService.uploadFile(file, filePath);
+                        user.setUserId(idea.getUserId());
+                        cate.setCateId(idea.getCateId());
+                        addIdea.setDescription(idea.getDescription());
+                        addIdea.setTitle(idea.getTitle());
+                        addIdea.setCateId(cate);
+                        addIdea.setViewCount(idea.getViewCount());
+                        addIdea.setCreateDate(idea.getCreateDate());
+                        addIdea.setLastModifyDate(idea.getLastModifyDate());
+                        submit.setSubmissionId(idea.getSubmissionId());
+                        addIdea.setSubmissionId(submit);
+                        addIdea.setUserId(user);
+                        ideaRepo.save(addIdea);
+                        Idea idea1 = new Idea();
+                        idea1.setIdeaId(addIdea.getIdeaId());
+                        fileModel.setIdeaId(idea1);
+                        fileModel.setFileName(existedUser.get().getEmail());
+                        fileModel.setFilePath(filePath);
+                        fileModel.setCreateDate(idea.getCreateDate());
+                        fileModel.setLastModifyDate(idea.getLastModifyDate());
+                        fileModel.setIdeaId(idea1);
+                        fileRepo.save(fileModel);
+                    }
+                    return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(), "Add idea successfully!", addIdea));
+                }
             }
-            return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"Add idea successfully!", addIdea));
-        }
-        return ResponseEntity.badRequest().body(new ResponseObject("Could not add idea!"));
+        return ResponseEntity.badRequest().body(new ResponseObject("Could not add an idea because the time to submit is already closed!"));
     }
-
 
     @Override
     public ResponseEntity<ResponseObject> deleteIdea(Long id) throws DbxException {
