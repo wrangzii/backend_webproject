@@ -6,6 +6,7 @@ import com.project.web.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,16 +30,19 @@ public class SubmissionController {
         return submissionServ.getSubmissionById(id);
     }
 
+    @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ResponseObject> addSubmission(@Valid @RequestBody Submission submission) {
         return submissionServ.addSubmission(submission);
     }
 
+    @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @PutMapping("/edit/{id}")
     public ResponseEntity<ResponseObject> editSubmission(@Valid @RequestBody Submission submission, @PathVariable Long id) {
         return submissionServ.editSubmission(submission, id);
     }
 
+    @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteSubmission(@PathVariable Long id) {
         return submissionServ.deleteSubmission(id);

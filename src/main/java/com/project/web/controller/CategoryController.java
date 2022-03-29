@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,21 +36,25 @@ public class CategoryController {
         return cateSer.getCateById(id);
     }
 
+    @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ResponseObject> addCategory(@Valid @RequestBody Category category) throws DbxException {
         return cateSer.addCategory(category);
     }
 
+    @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @PutMapping("/edit/{id}")
     public ResponseEntity<ResponseObject> editCategory(@Valid @RequestBody Category category, @PathVariable Long id) {
         return cateSer.editCategory(category,id);
     }
 
+    @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteCategory(@PathVariable Long id) {
         return cateSer.deleteCategory(id);
     }
 
+    @PreAuthorize("hasRole('QA_MANAGER')")
     @GetMapping("/download")
     public void downloadFile(HttpServletResponse response, @RequestParam String categoryName) throws Exception {
         dropboxService.downloadFile(response, categoryName);
