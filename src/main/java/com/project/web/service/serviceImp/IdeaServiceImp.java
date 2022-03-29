@@ -63,45 +63,44 @@ public class IdeaServiceImp implements IdeaService {
         Optional<User> existedUser = userRepo.findById(idea.getUserId());
         Optional<Submission> checkClosureDate = submissionRepo.findById(idea.getSubmissionId());
         Date date = new Date();
-        if (checkClosureDate.isPresent())
-            if (checkClosureDate.get().getClosureDate().after(date)) {
-                String filePath = "";
-                Optional<Category> category = categoryRepository.findById(idea.getCateId());
-                if (category.isPresent()) {
-                    Idea addIdea = new Idea();
-                    File fileModel = new File();
-                    Category cate = new Category();
-                    Submission submit = new Submission();
-                    User user = new User();
-                    if (existedUser.isPresent()) {
-                        filePath = "/" + category.get().getCateName() + "/" + existedUser.get().getUsername() + "_idea" + "/" + existedUser.get().getEmail();
+        if (checkClosureDate.isPresent() && checkClosureDate.get().getClosureDate().after(date)) {
+            String filePath = "";
+            Optional<Category> category = categoryRepository.findById(idea.getCateId());
+            if (category.isPresent()) {
+                Idea addIdea = new Idea();
+                File fileModel = new File();
+                Category cate = new Category();
+                Submission submit = new Submission();
+                User user = new User();
+                if (existedUser.isPresent()) {
+                    filePath = "/" + category.get().getCateName() + "/" + existedUser.get().getUsername() + "_idea" + "/" + existedUser.get().getEmail();
 //                dropboxService.createFolder(filePath, category.get().getCateName());
-                        dropboxService.uploadFile(file, filePath);
-                        user.setUserId(idea.getUserId());
-                        cate.setCateId(idea.getCateId());
-                        addIdea.setDescription(idea.getDescription());
-                        addIdea.setTitle(idea.getTitle());
-                        addIdea.setCateId(cate);
-                        addIdea.setViewCount(idea.getViewCount());
-                        addIdea.setCreateDate(idea.getCreateDate());
-                        addIdea.setLastModifyDate(idea.getLastModifyDate());
-                        submit.setSubmissionId(idea.getSubmissionId());
-                        addIdea.setSubmissionId(submit);
-                        addIdea.setUserId(user);
-                        ideaRepo.save(addIdea);
-                        Idea idea1 = new Idea();
-                        idea1.setIdeaId(addIdea.getIdeaId());
-                        fileModel.setIdeaId(idea1);
-                        fileModel.setFileName(existedUser.get().getEmail());
-                        fileModel.setFilePath(filePath);
-                        fileModel.setCreateDate(idea.getCreateDate());
-                        fileModel.setLastModifyDate(idea.getLastModifyDate());
-                        fileModel.setIdeaId(idea1);
-                        fileRepo.save(fileModel);
-                    }
-                    return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(), "Add idea successfully!", addIdea));
+                    dropboxService.uploadFile(file, filePath);
+                    user.setUserId(idea.getUserId());
+                    cate.setCateId(idea.getCateId());
+                    addIdea.setDescription(idea.getDescription());
+                    addIdea.setTitle(idea.getTitle());
+                    addIdea.setCateId(cate);
+                    addIdea.setViewCount(idea.getViewCount());
+                    addIdea.setCreateDate(idea.getCreateDate());
+                    addIdea.setLastModifyDate(idea.getLastModifyDate());
+                    submit.setSubmissionId(idea.getSubmissionId());
+                    addIdea.setSubmissionId(submit);
+                    addIdea.setUserId(user);
+                    ideaRepo.save(addIdea);
+                    Idea idea1 = new Idea();
+                    idea1.setIdeaId(addIdea.getIdeaId());
+                    fileModel.setIdeaId(idea1);
+                    fileModel.setFileName(existedUser.get().getEmail());
+                    fileModel.setFilePath(filePath);
+                    fileModel.setCreateDate(idea.getCreateDate());
+                    fileModel.setLastModifyDate(idea.getLastModifyDate());
+                    fileModel.setIdeaId(idea1);
+                    fileRepo.save(fileModel);
                 }
+                return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(), "Add idea successfully!", addIdea));
             }
+        }
         return ResponseEntity.badRequest().body(new ResponseObject("Could not add an idea because the time to submit is already closed!"));
     }
 
@@ -110,7 +109,9 @@ public class IdeaServiceImp implements IdeaService {
         Optional<Idea> deleteIdea = ideaRepo.findById(id);
             if (deleteIdea.isPresent()) {
                 Optional<File> deleteFile = fileRepo.findById(deleteIdea.get().getIdeaId());
-                dropboxService.deleteFile(deleteFile.get().getFilePath());
+                if (deleteFile.isPresent()) {
+                    dropboxService.deleteFile(deleteFile.get().getFilePath());
+                }
                 deleteFile.ifPresent(file -> fileRepo.deleteById(file.getFileId()));
                 ideaRepo.deleteById(id);
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Delete idea successfully!"));
@@ -121,42 +122,46 @@ public class IdeaServiceImp implements IdeaService {
     @Override
     public ResponseEntity<ResponseObject> editIdea(SubmitIdeaRequest idea, MultipartFile file, Long id) throws IOException, DbxException {
         Optional<User> existedUser = userRepo.findById(idea.getUserId());
-        String filePath = "";
-        Optional<Category> category = categoryRepository.findById(idea.getCateId());
-        Optional<Idea> editIdea = ideaRepo.findById(id);
-        if (editIdea.isPresent()) {
-            if (category.isPresent()) {
-                File fileModel = new File();
-                Category cate = new Category();
-                Submission submit = new Submission();
-                User user = new User();
-                if (existedUser.isPresent()) {
-                    filePath = "/" + category.get().getCateName() + "/" + existedUser.get().getUsername() + "_idea" + "/" + existedUser.get().getEmail();
-    //                dropboxService.createFolder(filePath, category.get().getCateName());
-                    dropboxService.uploadFile(file, filePath);
-                    user.setUserId(idea.getUserId());
-                    cate.setCateId(idea.getCateId());
-                    editIdea.get().setDescription(idea.getDescription());
-                    editIdea.get().setTitle(idea.getTitle());
-                    editIdea.get().setCateId(cate);
-                    editIdea.get().setViewCount(idea.getViewCount());
-                    editIdea.get().setCreateDate(idea.getCreateDate());
-                    editIdea.get().setLastModifyDate(idea.getLastModifyDate());
-                    submit.setSubmissionId(idea.getSubmissionId());
-                    editIdea.get().setSubmissionId(submit);
-                    editIdea.get().setUserId(user);
-                    ideaRepo.save(editIdea.get());
-                    Idea idea1 = new Idea();
-                    idea1.setIdeaId(editIdea.get().getIdeaId());
-                    fileModel.setIdeaId(idea1);
-                    fileModel.setFileName(existedUser.get().getEmail());
-                    fileModel.setFilePath(filePath);
-                    fileModel.setLastModifyDate(idea.getCreateDate());
-                    fileModel.setLastModifyDate(idea.getLastModifyDate());
-                    fileModel.setIdeaId(idea1);
-                    fileRepo.save(fileModel);
+        Optional<Submission> checkClosureDate = submissionRepo.findById(idea.getSubmissionId());
+        Date date = new Date();
+        if (checkClosureDate.isPresent() && checkClosureDate.get().getClosureDate().after(date)) {
+            String filePath = "";
+            Optional<Category> category = categoryRepository.findById(idea.getCateId());
+            Optional<Idea> editIdea = ideaRepo.findById(id);
+            if (editIdea.isPresent()) {
+                if (category.isPresent()) {
+                    File fileModel = new File();
+                    Category cate = new Category();
+                    Submission submit = new Submission();
+                    User user = new User();
+                    if (existedUser.isPresent()) {
+                        filePath = "/" + category.get().getCateName() + "/" + existedUser.get().getUsername() + "_idea" + "/" + existedUser.get().getEmail();
+                        //                dropboxService.createFolder(filePath, category.get().getCateName());
+                        dropboxService.uploadFile(file, filePath);
+                        user.setUserId(idea.getUserId());
+                        cate.setCateId(idea.getCateId());
+                        editIdea.get().setDescription(idea.getDescription());
+                        editIdea.get().setTitle(idea.getTitle());
+                        editIdea.get().setCateId(cate);
+                        editIdea.get().setViewCount(idea.getViewCount());
+                        editIdea.get().setCreateDate(idea.getCreateDate());
+                        editIdea.get().setLastModifyDate(idea.getLastModifyDate());
+                        submit.setSubmissionId(idea.getSubmissionId());
+                        editIdea.get().setSubmissionId(submit);
+                        editIdea.get().setUserId(user);
+                        ideaRepo.save(editIdea.get());
+                        Idea idea1 = new Idea();
+                        idea1.setIdeaId(editIdea.get().getIdeaId());
+                        fileModel.setIdeaId(idea1);
+                        fileModel.setFileName(existedUser.get().getEmail());
+                        fileModel.setFilePath(filePath);
+                        fileModel.setLastModifyDate(idea.getCreateDate());
+                        fileModel.setLastModifyDate(idea.getLastModifyDate());
+                        fileModel.setIdeaId(idea1);
+                        fileRepo.save(fileModel);
+                    }
+                    return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(), "Add idea successfully!", editIdea));
                 }
-                return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"Add idea successfully!", editIdea));
             }
         }
         return ResponseEntity.badRequest().body(new ResponseObject("Could not edit idea, because idea is not created!"));

@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
     @Query(value = "SELECT * FROM reactions WHERE idea_id =?1", nativeQuery = true)
     List<Reaction> findByIdeaId(Long ideaId);
-    Boolean existsByReactionType(String type);
     Optional<Reaction> findByUserId(User userId);
     Boolean existsByIdeaId(Idea ideaId);
 }
