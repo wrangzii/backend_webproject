@@ -90,7 +90,6 @@ public class UserServiceImp implements UserService {
         user.setDepartmentId(department);
         user.setRoles(roles);
         user.setEnabled(true);
-        //user.setDepartmentId(signUpRequest.getDepartmentId());
         userRepo.save(user);
         return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"User registered successfully!", user));
     }

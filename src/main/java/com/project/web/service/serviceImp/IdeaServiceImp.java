@@ -6,6 +6,7 @@ import com.project.web.model.*;
 import com.project.web.payload.request.SubmitIdeaRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.*;
+import com.project.web.service.EmailSenderService;
 import com.project.web.service.IdeaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +33,7 @@ public class IdeaServiceImp implements IdeaService {
     private final UserRepository userRepo;
     private final CategoryRepository categoryRepository;
     private final SubmissionRepository submissionRepo;
+    private final EmailSenderService emailSenderService;
 
     @Autowired
     DropboxService dropboxService;
@@ -99,6 +102,7 @@ public class IdeaServiceImp implements IdeaService {
                     fileModel.setIdeaId(idea1);
                     fileRepo.save(fileModel);
                 }
+                sendMailToQaCoordinator();
                 return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(), "Add idea successfully!", addIdea));
             }
         }
@@ -167,5 +171,24 @@ public class IdeaServiceImp implements IdeaService {
             }
         }
         return ResponseEntity.badRequest().body(new ResponseObject("Could not edit idea, because idea is not created!"));
+    }
+
+    private void sendMailToQaCoordinator() {
+        List<User> users = userRepo.findAll();
+        for (User user: users) {
+            for (Role role : user.getRoles()) {
+                if (role.getRoleName().toString().equals("ROLE_QA_COORDINATOR")) {
+                    // Create the email
+                    SimpleMailMessage mailMessage = new SimpleMailMessage();
+                    mailMessage.setTo(user.getEmail());
+                    mailMessage.setSubject("A new idea submission");
+                    mailMessage.setFrom("test-email@gmail.com");
+                    mailMessage.setText("A staff just submit a new idea. Let check it now!");
+
+                    // Send the email
+                    emailSenderService.sendEmail(mailMessage);
+                }
+            }
+        }
     }
 }
