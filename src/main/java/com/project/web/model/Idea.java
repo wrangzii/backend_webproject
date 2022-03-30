@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -29,7 +30,7 @@ public class Idea {
     @ManyToOne
     @JoinColumn(name = "submissionId")
     private Submission submissionId;
-    @NotEmpty(message = "*Please provide the information")
+    @NotNull
     private Boolean isAnonymous;
 
     public Idea() {

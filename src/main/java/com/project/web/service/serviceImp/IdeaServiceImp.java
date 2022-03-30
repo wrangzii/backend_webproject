@@ -87,6 +87,7 @@ public class IdeaServiceImp implements IdeaService {
                     submit.setSubmissionId(idea.getSubmissionId());
                     addIdea.setSubmissionId(submit);
                     addIdea.setUserId(user);
+                    addIdea.setIsAnonymous(idea.getIsAnonymous());
                     ideaRepo.save(addIdea);
                     Idea idea1 = new Idea();
                     idea1.setIdeaId(addIdea.getIdeaId());
@@ -149,6 +150,7 @@ public class IdeaServiceImp implements IdeaService {
                         submit.setSubmissionId(idea.getSubmissionId());
                         editIdea.get().setSubmissionId(submit);
                         editIdea.get().setUserId(user);
+                        editIdea.get().setIsAnonymous(idea.getIsAnonymous());
                         ideaRepo.save(editIdea.get());
                         Idea idea1 = new Idea();
                         idea1.setIdeaId(editIdea.get().getIdeaId());

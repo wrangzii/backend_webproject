@@ -18,4 +18,5 @@ public class SubmitIdeaRequest {
     private Long userId;
     private Long cateId;
     private Long submissionId;
+    private Boolean isAnonymous;
 }
