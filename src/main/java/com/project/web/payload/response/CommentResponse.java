@@ -16,5 +16,6 @@ public class CommentResponse {
     Date closureDate;
     Date finalClosureDate;
     Long parentCommentId;
+    Boolean isAnonymous;
 
 }

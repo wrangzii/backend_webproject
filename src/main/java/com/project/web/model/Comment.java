@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -26,4 +27,6 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name="parentCommentId", referencedColumnName="commentId")
     private Comment parentCommentId;
+    @NotNull
+    private Boolean isAnonymous;
 }

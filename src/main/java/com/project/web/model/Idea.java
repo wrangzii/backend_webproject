@@ -29,6 +29,8 @@ public class Idea {
     @ManyToOne
     @JoinColumn(name = "submissionId")
     private Submission submissionId;
+    @NotEmpty(message = "*Please provide the information")
+    private Boolean isAnonymous;
 
     public Idea() {
     }

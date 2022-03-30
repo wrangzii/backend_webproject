@@ -45,6 +45,7 @@ public class CommentServiceImp implements CommentService {
             commentResponse.setSubmissionId(comment.getIdeaId().getSubmissionId().getSubmissionId());
             commentResponse.setClosureDate(comment.getIdeaId().getSubmissionId().getClosureDate());
             commentResponse.setFinalClosureDate(comment.getIdeaId().getSubmissionId().getFinalClosureDate());
+            commentResponse.setIsAnonymous(comment.getIsAnonymous());
             if (comment.getParentCommentId() != null) {
                 commentResponse.setParentCommentId(comment.getParentCommentId().getCommentId());
             } else {
@@ -78,6 +79,7 @@ public class CommentServiceImp implements CommentService {
                     parentComment.setCommentId(comment.getParentComment());
                     addComment.setParentCommentId(parentComment);
                 }
+                addComment.setIsAnonymous(comment.getIsAnonymous());
                 commentRepo.save(addComment);
                 return ResponseEntity.ok().body(new ResponseObject(HttpStatus.OK));
             }
@@ -100,6 +102,7 @@ public class CommentServiceImp implements CommentService {
         if (editComment.isPresent()) {
             editComment.get().setContent(comment.getContent());
             editComment.get().setLastModifyDate(new Date());
+            editComment.get().setIsAnonymous(comment.getIsAnonymous());
             commentRepo.save(editComment.get());
         }
         return null;

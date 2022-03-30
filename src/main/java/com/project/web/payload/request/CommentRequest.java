@@ -8,4 +8,5 @@ public class CommentRequest {
     Long userId;
     Long ideaId;
     Long parentComment;
+    Boolean isAnonymous;
 }
