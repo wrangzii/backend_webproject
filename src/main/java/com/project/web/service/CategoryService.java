@@ -6,7 +6,6 @@ import com.project.web.payload.request.CategoryRequest;
 import com.project.web.payload.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -16,5 +15,5 @@ public interface CategoryService {
     ResponseEntity<ResponseObject> addCategory(CategoryRequest category);
     ResponseEntity<ResponseObject> deleteCategory(Long id);
     ResponseEntity<ResponseObject> editCategory(CategoryRequest category, Long id);
-    ResponseEntity<ResponseObject> downloadAllFileIdea(HttpServletResponse response, Long id) throws IOException, DbxException;
+    ResponseEntity<ResponseObject> downloadAllFileIdea(Long id) throws IOException, DbxException;
 }

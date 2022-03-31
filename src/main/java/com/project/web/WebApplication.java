@@ -17,7 +17,7 @@ public class WebApplication {
 	}
 	@Bean("dropboxClient")
 	public DbxClientV2 dropboxClient() {
-		String ACCESS_TOKEN = "sl.BE2n-5WRlsHZ01m2DdmjqVXK4Ycx6adZIrVFgeZx_tWuRrZb0xW2mZdG4PPlnPdj-92wY0jHk-ZCmgRCbJ-N46SjnBQAtBhHNOghXHr-OLWCUEBjyPBG3LTvp_Ppv_6Edc9WaC-hzgbr";
+		String ACCESS_TOKEN = "sl.BE3GOuvtdxPIZfzXKylekcM21s0jHCEtT0pqqdvdrZ1S6mYVlZjJBixFUl7LRgzs225HOoX3xAIYHZkJ7iCHFabPzELPNgoTKPetDVJOzllTSGpcuwP5e67UDPiYlhXz1ljXqs0OW48d";
 		DbxRequestConfig config = new DbxRequestConfig("/");
 		return new DbxClientV2(config, ACCESS_TOKEN);
 	}

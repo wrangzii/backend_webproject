@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -89,10 +88,10 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> downloadAllFileIdea(HttpServletResponse response, Long id) throws IOException, DbxException {
+    public ResponseEntity<ResponseObject> downloadAllFileIdea(Long id) throws IOException, DbxException {
         Optional<Category> categoryExists = cateRepo.findById(id);
         if (categoryExists.isPresent()) {
-            dropboxService.downloadFile(response,"/" +  categoryExists.get().getCateName() + ".zip");
+            dropboxService.downloadFile( categoryExists.get().getCateName() + ".zip");
             return ResponseEntity.ok().body(new ResponseObject("Download successfully!"));
         }
         return ResponseEntity.badRequest().body(new ResponseObject("Download fail!"));

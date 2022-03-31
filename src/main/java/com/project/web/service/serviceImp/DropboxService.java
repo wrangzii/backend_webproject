@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,9 +29,9 @@ public class DropboxService {
         inputStream.close();
     }
 
-    public void downloadFile(HttpServletResponse response, String filePath) throws IOException, DbxException {
-        OutputStream outputStream = new FileOutputStream(filePath);
-        dropboxClient.files().downloadZipBuilder("/" + filePath).download(outputStream);
+    public void downloadFile(String cateName) throws IOException, DbxException {
+        OutputStream outputStream = new FileOutputStream(cateName);
+        dropboxClient.files().downloadZipBuilder("/" + cateName).download(outputStream);
     }
 
     public void deleteFile(String filePath) throws DbxException {

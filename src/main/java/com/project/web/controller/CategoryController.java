@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -56,8 +55,8 @@ public class CategoryController {
     }
 
     @PreAuthorize("hasRole('QA_MANAGER')")
-    @GetMapping("/download")
-    public void downloadFile(HttpServletResponse response, @RequestParam String categoryName) throws Exception {
-        dropboxService.downloadFile(response, categoryName);
+    @GetMapping("/download/{cateId}")
+    public ResponseEntity<ResponseObject> downloadFile(@PathVariable Long cateId) throws Exception {
+        return cateSer.downloadAllFileIdea(cateId);
     }
 }
