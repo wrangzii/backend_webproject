@@ -1,9 +1,6 @@
 package com.project.web.service.serviceImp;
 
-import com.project.web.model.Comment;
-import com.project.web.model.Idea;
-import com.project.web.model.Submission;
-import com.project.web.model.User;
+import com.project.web.model.*;
 import com.project.web.payload.request.CommentRequest;
 import com.project.web.payload.response.CommentResponse;
 import com.project.web.payload.response.ResponseObject;
@@ -11,9 +8,11 @@ import com.project.web.repository.CommentRepository;
 import com.project.web.repository.IdeaRepository;
 import com.project.web.repository.SubmissionRepository;
 import com.project.web.service.CommentService;
+import com.project.web.service.EmailSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ public class CommentServiceImp implements CommentService {
     private final CommentRepository commentRepo;
     private final IdeaRepository ideaRepo;
     private final SubmissionRepository submissionRepo;
+    private final EmailSenderService emailSenderService;
 
     @Override
     public List<CommentResponse> getAllCommentByIdea(Long ideaId) {
@@ -58,7 +58,7 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> addCommentOfUser(CommentRequest comment) {
+    public ResponseEntity<ResponseObject> addCommentOfUser(CommentRequest comment, Long parentCommentId) {
         Optional<Idea> checkIdeaExist = ideaRepo.findById(comment.getIdeaId());
         Comment addComment = new Comment();
         User user = new User();
@@ -75,12 +75,13 @@ public class CommentServiceImp implements CommentService {
                 idea.setIdeaId(comment.getIdeaId());
                 addComment.setIdeaId(idea);
                 addComment.setUserId(user);
-                if (comment.getParentComment() != null) {
-                    parentComment.setCommentId(comment.getParentComment());
+                if (parentCommentId != null) {
+                    parentComment.setCommentId(parentCommentId);
                     addComment.setParentCommentId(parentComment);
                 }
                 addComment.setIsAnonymous(comment.getIsAnonymous());
                 commentRepo.save(addComment);
+                sendMailToTheAuthor(checkIdeaExist.get().getUserId().getEmail());
                 return ResponseEntity.ok().body(new ResponseObject(HttpStatus.OK));
             }
         }
@@ -107,4 +108,17 @@ public class CommentServiceImp implements CommentService {
         }
         return null;
     }
+
+    private void sendMailToTheAuthor(String email) {
+        // Create the email
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("A new comment on your idea");
+        mailMessage.setFrom("test-email@gmail.com");
+        mailMessage.setText("Someone just commented on your idea. Let check it now!");
+
+        // Send the email
+        emailSenderService.sendEmail(mailMessage);
+    }
+
 }

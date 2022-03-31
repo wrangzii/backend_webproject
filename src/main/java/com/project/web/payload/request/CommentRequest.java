@@ -7,6 +7,5 @@ public class CommentRequest {
     String content;
     Long userId;
     Long ideaId;
-    Long parentComment;
     Boolean isAnonymous;
 }

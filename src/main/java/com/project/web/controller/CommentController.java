@@ -26,8 +26,9 @@ public class CommentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ResponseObject> addCommentOfUser(@Valid @RequestBody CommentRequest comment) {
-        return commentSer.addCommentOfUser(comment);
+    public ResponseEntity<ResponseObject> addCommentOfUser(@Valid @RequestBody CommentRequest comment,
+                                                           @RequestParam(required = false) Long parentCommentId) {
+        return commentSer.addCommentOfUser(comment, parentCommentId);
     }
 
     @PutMapping("/edit/{id}")
