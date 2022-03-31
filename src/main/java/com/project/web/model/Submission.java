@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -17,8 +18,8 @@ public class Submission {
     private String submissionName;
     @NotEmpty(message = "*Please provide description name")
     private String description;
-    @NotEmpty(message = "*Please provide closure date")
+    @NotNull
     private Date closureDate;
-    @NotEmpty(message = "*Please provide final closure date")
+    @NotNull
     private Date finalClosureDate;
 }
