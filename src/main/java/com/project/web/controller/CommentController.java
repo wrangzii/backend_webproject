@@ -32,8 +32,9 @@ public class CommentController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseObject> editComment(@Valid @RequestBody CommentRequest comment, @PathVariable Long id) {
-        return commentSer.editComment(comment,id);
+    public ResponseEntity<ResponseObject> editComment(@Valid @RequestBody CommentRequest comment, @PathVariable Long id,
+                                                      @RequestParam(required = false) Long parentCommentId) {
+        return commentSer.editComment(comment, id, parentCommentId);
     }
 
     @DeleteMapping("/delete/{id}")

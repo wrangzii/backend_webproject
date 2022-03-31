@@ -98,15 +98,21 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> editComment(CommentRequest comment, Long id) {
+    public ResponseEntity<ResponseObject> editComment(CommentRequest comment, Long id, Long parentCommentId) {
         Optional<Comment> editComment = commentRepo.findById(id);
+        Comment parentComment = new Comment();
         if (editComment.isPresent()) {
             editComment.get().setContent(comment.getContent());
             editComment.get().setLastModifyDate(new Date());
+            if (parentCommentId != null) {
+                parentComment.setCommentId(parentCommentId);
+                editComment.get().setParentCommentId(parentComment);
+            }
             editComment.get().setIsAnonymous(comment.getIsAnonymous());
             commentRepo.save(editComment.get());
+            return ResponseEntity.ok().body(new ResponseObject(HttpStatus.OK));
         }
-        return null;
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString()));
     }
 
     private void sendMailToTheAuthor(String email) {
