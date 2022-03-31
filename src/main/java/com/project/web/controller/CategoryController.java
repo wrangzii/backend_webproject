@@ -2,6 +2,7 @@ package com.project.web.controller;
 
 import com.dropbox.core.DbxException;
 import com.project.web.model.Category;
+import com.project.web.payload.request.CategoryRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.CategoryService;
 import com.project.web.service.serviceImp.DropboxService;
@@ -38,13 +39,13 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @PostMapping("/add")
-    public ResponseEntity<ResponseObject> addCategory(@Valid @RequestBody Category category) throws DbxException {
+    public ResponseEntity<ResponseObject> addCategory(@Valid @RequestBody CategoryRequest category) throws DbxException {
         return cateSer.addCategory(category);
     }
 
     @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseObject> editCategory(@Valid @RequestBody Category category, @PathVariable Long id) {
+    public ResponseEntity<ResponseObject> editCategory(@Valid @RequestBody CategoryRequest category, @PathVariable Long id) {
         return cateSer.editCategory(category,id);
     }
 

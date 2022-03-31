@@ -76,17 +76,15 @@ public class IdeaServiceImp implements IdeaService {
                 Submission submit = new Submission();
                 User user = new User();
                 if (existedUser.isPresent()) {
-                    filePath = "/" + category.get().getCateName() + "/" + existedUser.get().getUsername() + "_idea" + "/" + existedUser.get().getEmail();
-//                dropboxService.createFolder(filePath, category.get().getCateName());
+                    filePath = "/" + category.get().getCateName() + ".zip/" + existedUser.get().getUsername() + "_idea" + "/" + file.getOriginalFilename();
                     dropboxService.uploadFile(file, filePath);
                     user.setUserId(idea.getUserId());
                     cate.setCateId(idea.getCateId());
                     addIdea.setDescription(idea.getDescription());
                     addIdea.setTitle(idea.getTitle());
                     addIdea.setCateId(cate);
-                    addIdea.setViewCount(idea.getViewCount());
-                    addIdea.setCreateDate(idea.getCreateDate());
-                    addIdea.setLastModifyDate(idea.getLastModifyDate());
+                    addIdea.setCreateDate(date);
+                    addIdea.setLastModifyDate(date);
                     submit.setSubmissionId(idea.getSubmissionId());
                     addIdea.setSubmissionId(submit);
                     addIdea.setUserId(user);
@@ -97,8 +95,8 @@ public class IdeaServiceImp implements IdeaService {
                     fileModel.setIdeaId(idea1);
                     fileModel.setFileName(existedUser.get().getEmail());
                     fileModel.setFilePath(filePath);
-                    fileModel.setCreateDate(idea.getCreateDate());
-                    fileModel.setLastModifyDate(idea.getLastModifyDate());
+                    fileModel.setCreateDate(date);
+                    fileModel.setLastModifyDate(date);
                     fileModel.setIdeaId(idea1);
                     fileRepo.save(fileModel);
                 }
@@ -140,17 +138,14 @@ public class IdeaServiceImp implements IdeaService {
                     Submission submit = new Submission();
                     User user = new User();
                     if (existedUser.isPresent()) {
-                        filePath = "/" + category.get().getCateName() + "/" + existedUser.get().getUsername() + "_idea" + "/" + existedUser.get().getEmail();
-                        //                dropboxService.createFolder(filePath, category.get().getCateName());
+                        filePath = "/" + category.get().getCateName() + ".zip/" + existedUser.get().getUsername() + "_idea" + "/" + file.getOriginalFilename();
                         dropboxService.uploadFile(file, filePath);
                         user.setUserId(idea.getUserId());
                         cate.setCateId(idea.getCateId());
                         editIdea.get().setDescription(idea.getDescription());
                         editIdea.get().setTitle(idea.getTitle());
                         editIdea.get().setCateId(cate);
-                        editIdea.get().setViewCount(idea.getViewCount());
-                        editIdea.get().setCreateDate(idea.getCreateDate());
-                        editIdea.get().setLastModifyDate(idea.getLastModifyDate());
+                        editIdea.get().setLastModifyDate(date);
                         submit.setSubmissionId(idea.getSubmissionId());
                         editIdea.get().setSubmissionId(submit);
                         editIdea.get().setUserId(user);
@@ -161,8 +156,7 @@ public class IdeaServiceImp implements IdeaService {
                         fileModel.setIdeaId(idea1);
                         fileModel.setFileName(existedUser.get().getEmail());
                         fileModel.setFilePath(filePath);
-                        fileModel.setLastModifyDate(idea.getCreateDate());
-                        fileModel.setLastModifyDate(idea.getLastModifyDate());
+                        fileModel.setLastModifyDate(date);
                         fileModel.setIdeaId(idea1);
                         fileRepo.save(fileModel);
                     }

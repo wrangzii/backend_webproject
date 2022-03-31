@@ -69,8 +69,8 @@ public class CommentServiceImp implements CommentService {
             Optional<Submission> checkClosureDate = submissionRepo.findById(checkIdeaExist.get().getSubmissionId().getSubmissionId());
             if (checkClosureDate.isPresent() && checkClosureDate.get().getFinalClosureDate().after(date)) {
                 addComment.setContent(comment.getContent());
-                addComment.setCreateDate(new Date());
-                addComment.setLastModifyDate(new Date());
+                addComment.setCreateDate(date);
+                addComment.setLastModifyDate(date);
                 user.setUserId(comment.getUserId());
                 idea.setIdeaId(comment.getIdeaId());
                 addComment.setIdeaId(idea);
