@@ -4,6 +4,7 @@ package com.project.web.service.serviceImp;
 import com.dropbox.core.DbxException;
 import com.project.web.model.*;
 import com.project.web.payload.request.SubmitIdeaRequest;
+import com.project.web.payload.response.ExportDataResponse;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.*;
 import com.project.web.service.EmailSenderService;
@@ -53,6 +54,28 @@ public class IdeaServiceImp implements IdeaService {
     }
 
     @Override
+    public List<ExportDataResponse> getAllIdeaToExport() {
+        List<Idea> ideas = (List<Idea>) ideaRepo.findAll();
+        ExportDataResponse data = new ExportDataResponse();
+        List<ExportDataResponse> dataExport = new ArrayList<>();
+        for (Idea idea : ideas) {
+            data.setIdeaId(idea.getIdeaId());
+            data.setUsername(idea.getUserId().getUsername());
+            data.setSubmissionId(idea.getSubmissionId().getSubmissionId());
+            data.setCategoryName(idea.getCateId().getCateName());
+            data.setTitle(idea.getTitle());
+            data.setDescription(idea.getDescription());
+            data.setViewCount(idea.getViewCount());
+            data.setCreateDate(idea.getCreateDate().toString());
+            data.setModifyDate(idea.getLastModifyDate().toString());
+            data.setIsAnonymous(idea.getIsAnonymous());
+
+            dataExport.add(data);
+        }
+        return dataExport;
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> getIdeaById(Long id) {
         Optional<Idea> checkExisted= ideaRepo.findById(id);
         if (checkExisted.isPresent()) {
@@ -88,6 +111,7 @@ public class IdeaServiceImp implements IdeaService {
                     submit.setSubmissionId(idea.getSubmissionId());
                     addIdea.setSubmissionId(submit);
                     addIdea.setUserId(user);
+                    addIdea.setViewCount(0);
                     addIdea.setIsAnonymous(idea.getIsAnonymous());
                     ideaRepo.save(addIdea);
                     Idea idea1 = new Idea();
@@ -120,6 +144,16 @@ public class IdeaServiceImp implements IdeaService {
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Delete idea successfully!"));
         }
         return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: The idea is not exist!"));
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> addViewCount(Long id) {
+        Optional<Idea> idea = ideaRepo.findById(id);
+        if (idea.isPresent()) {
+            idea.get().setViewCount(idea.get().getViewCount() + 1);
+            ideaRepo.save(idea.get());
+        }
+        return null;
     }
 
     @Override
