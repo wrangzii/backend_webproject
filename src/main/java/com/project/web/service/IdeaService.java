@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IdeaService {
-    List<Idea> getAllIdea(int pageNumber);
+    List<Idea> getAllIdea(Integer pageNumber);
+    List<Idea> getLatestIdeas(int pageNumber);
     List<ExportDataResponse> getAllIdeaToExport();
     ResponseEntity<ResponseObject> getIdeaById(Long id);
     ResponseEntity<ResponseObject> addIdea(SubmitIdeaRequest idea, MultipartFile file) throws Exception;

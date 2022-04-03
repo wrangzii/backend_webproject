@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CategoryService {
-    List<Category> getAllCategory(int pageNumber);
+    List<Category> getAllCategory(Integer pageNumber);
     ResponseEntity<ResponseObject> getCateById(Long id);
     ResponseEntity<ResponseObject> addCategory(CategoryRequest category);
     ResponseEntity<ResponseObject> deleteCategory(Long id);

@@ -18,6 +18,7 @@ public class Idea {
     private String title;
     @NotEmpty(message = "*Please provide description")
     private String description;
+    @Column(name = "create_date")
     private Date createDate;
     private Date lastModifyDate;
     private Integer viewCount;

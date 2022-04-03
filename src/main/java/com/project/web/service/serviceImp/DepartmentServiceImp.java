@@ -22,7 +22,7 @@ public class DepartmentServiceImp implements DepartmentService {
     private final DepartmentRepository departmentRepo;
 
     @Override
-    public List<Department> getAllDepartment(int pageNumber) {
+    public List<Department> getAllDepartment(Integer pageNumber) {
         int pageSize = 10;
         Pageable paging = PageRequest.of(pageNumber,pageSize);
         Page<Department> pagedResult = departmentRepo.findAll(paging);

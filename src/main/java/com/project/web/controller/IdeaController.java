@@ -33,7 +33,7 @@ public class IdeaController {
     private final IdeaService ideaService;
 
     @GetMapping("/all")
-    public List<Idea> getAllIdea(@RequestParam int pageNumber) {return ideaService.getAllIdea(pageNumber);}
+    public List<Idea> getAllIdea(@RequestParam Integer pageNumber) {return ideaService.getAllIdea(pageNumber);}
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getIdeaById(@PathVariable Long id) {
@@ -84,4 +84,10 @@ public class IdeaController {
     public ResponseEntity<ResponseObject> viewCount(@PathVariable Long id) {
         return ideaService.addViewCount(id);
     }
+
+    @GetMapping("/getLatestIdeas")
+    public List<Idea> getLatestIdeas(@RequestParam int pageNumber) {
+        return ideaService.getLatestIdeas(pageNumber);
+    }
+
 }

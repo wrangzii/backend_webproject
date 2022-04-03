@@ -21,7 +21,7 @@ public class DepartmentController {
     private final DepartmentService departmentSer;
 
     @GetMapping("/all")
-    public List<Department> getAllDepart(@RequestParam int pageNumber) {
+    public List<Department> getAllDepart(@RequestParam Integer pageNumber) {
         return departmentSer.getAllDepartment(pageNumber);
     }
 

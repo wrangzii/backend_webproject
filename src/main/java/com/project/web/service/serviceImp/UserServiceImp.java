@@ -1,6 +1,9 @@
 package com.project.web.service.serviceImp;
 
-import com.project.web.model.*;
+import com.project.web.model.Department;
+import com.project.web.model.ERole;
+import com.project.web.model.Role;
+import com.project.web.model.User;
 import com.project.web.payload.request.LoginRequest;
 import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
@@ -13,6 +16,8 @@ import com.project.web.service.EmailSenderService;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,15 +38,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImp implements UserService {
-    private final UserRepository userRepo;
-    private final RoleRepository roleRepo;
+    @Autowired
+    private UserRepository userRepo;
+    @Autowired
+    private RoleRepository roleRepo;
+    @Qualifier("passwordEncoder")
     private final PasswordEncoder encoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
-    private final EmailSenderService emailSenderService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUtils jwtUtils;
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @Override
     public List<User> getAllUser(int pageNumber) {
@@ -174,7 +185,7 @@ public class UserServiceImp implements UserService {
             mailMessage.setSubject("Complete Password Reset!");
             mailMessage.setFrom("test-email@gmail.com");
             mailMessage.setText("To complete the password reset process, please click here: "
-                    + "http://localhost:8080/confirm_reset?token=" + existedUser.get().getResetPasswordToken());
+                    + "http://localhost:3000/confirm_reset?token=" + existedUser.get().getResetPasswordToken());
 
             // Send the email
             emailSenderService.sendEmail(mailMessage);

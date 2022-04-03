@@ -27,7 +27,7 @@ public class CategoryServiceImp implements CategoryService {
     private final DropboxService dropboxService;
 
     @Override
-    public List<Category> getAllCategory(int pageNumber) {
+    public List<Category> getAllCategory(Integer pageNumber) {
         int pageSize = 10;
         Pageable paging = PageRequest.of(pageNumber,pageSize);
         Page<Category> pagedResult = cateRepo.findAll(paging);

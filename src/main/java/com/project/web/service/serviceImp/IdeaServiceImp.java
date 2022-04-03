@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -35,12 +36,13 @@ public class IdeaServiceImp implements IdeaService {
     private final CategoryRepository categoryRepository;
     private final SubmissionRepository submissionRepo;
     private final EmailSenderService emailSenderService;
+    private final DepartmentRepository departmentRepo;
 
     @Autowired
     DropboxService dropboxService;
 
     @Override
-    public List<Idea> getAllIdea(int pageNumber) {
+    public List<Idea> getAllIdea(Integer pageNumber) {
         int pageSize = 5;
         Pageable paging = PageRequest.of(pageNumber,pageSize);
 
@@ -54,8 +56,22 @@ public class IdeaServiceImp implements IdeaService {
     }
 
     @Override
+    public List<Idea> getLatestIdeas(int pageNumber) {
+        int pageSize = 5;
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC,"createDate"));
+
+        Page<Idea> pagedResult = ideaRepo.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
     public List<ExportDataResponse> getAllIdeaToExport() {
-        List<Idea> ideas = (List<Idea>) ideaRepo.findAll();
+        List<Idea> ideas = ideaRepo.findAll();
         ExportDataResponse data = new ExportDataResponse();
         List<ExportDataResponse> dataExport = new ArrayList<>();
         for (Idea idea : ideas) {
@@ -123,8 +139,9 @@ public class IdeaServiceImp implements IdeaService {
                     fileModel.setLastModifyDate(date);
                     fileModel.setIdeaId(idea1);
                     fileRepo.save(fileModel);
+                    Optional<User> getDepartment = userRepo.findById(idea.getUserId());
+                    getDepartment.ifPresent(value -> sendMailToQaCoordinator(value.getDepartmentId().getDepartmentId()));
                 }
-                sendMailToQaCoordinator();
                 return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(), "Add idea successfully!", addIdea));
             }
         }
@@ -201,8 +218,8 @@ public class IdeaServiceImp implements IdeaService {
         return ResponseEntity.badRequest().body(new ResponseObject("Could not edit idea, because idea is not created!"));
     }
 
-    private void sendMailToQaCoordinator() {
-        List<User> users = userRepo.findAll();
+    private void sendMailToQaCoordinator(Long departmentId) {
+        List<User> users = userRepo.findByDepartmentId(departmentId);
         for (User user: users) {
             for (Role role : user.getRoles()) {
                 if (role.getRoleName().toString().equals("ROLE_QA_COORDINATOR")) {

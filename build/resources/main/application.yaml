@@ -1,4 +1,7 @@
 spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
   datasource:
     initialization-mode : always
     url: jdbc:sqlserver://localhost:1433;database=collecting_ideas_project
@@ -12,6 +15,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  main:
+    allow-bean-definition-overriding: true
   mail:
     host: smtp.gmail.com
     username: duynh120600@gmail.com

@@ -1,5 +1,6 @@
 package com.project.web.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -19,6 +20,7 @@ public class SignupRequest {
     private String email;
     private Set<String> role;
     private String phoneNumber;
+    @JsonFormat(pattern="mm/dd/yyyy HH:mm:ss")
     private Date dateOfBirth;
     private String fullName;
     private Long departmentId;
