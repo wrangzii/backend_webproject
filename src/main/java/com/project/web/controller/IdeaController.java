@@ -3,7 +3,6 @@ package com.project.web.controller;
 import com.dropbox.core.DbxException;
 import com.project.web.model.Idea;
 import com.project.web.payload.request.SubmitIdeaRequest;
-import com.project.web.payload.response.ExportDataResponse;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.IdeaService;
 import lombok.RequiredArgsConstructor;
@@ -12,16 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -57,27 +50,8 @@ public class IdeaController {
     }
 
     @GetMapping("/export")
-    public void exportToCSV(HttpServletResponse response) throws IOException {
-        response.setContentType("text/csv");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=ideas_" + currentDateTime + ".csv";
-        response.setHeader(headerKey, headerValue);
-
-        List<ExportDataResponse> listIdeas = ideaService.getAllIdeaToExport();
-
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Username", "Idea ID", "Submission Id", "Category Name", "title", "Description", "view count", "Create date", "Modify date", "Is anonymous"};
-        String[] nameMapping = {"username", "ideaId", "submissionId", "categoryName", "title", "description", "viewCount", "createDate", "modifyDate", "isAnonymous"};
-        csvWriter.writeHeader(csvHeader);
-
-        for (ExportDataResponse idea : listIdeas) {
-            csvWriter.write(idea, nameMapping);
-        }
-
-        csvWriter.close();
+    public ResponseEntity<ResponseObject> exportToCSV(HttpServletResponse response) throws IOException {
+        return ideaService.getAllIdeaToExport(response);
     }
 
     @GetMapping("/viewCount/{id}")

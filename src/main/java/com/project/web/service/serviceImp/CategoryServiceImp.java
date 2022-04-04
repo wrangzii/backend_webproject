@@ -29,9 +29,8 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public List<Category> getAllCategory(Integer pageNumber) {
         int pageSize = 10;
-        Pageable paging = PageRequest.of(pageNumber,pageSize);
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
         Page<Category> pagedResult = cateRepo.findAll(paging);
-
         if(pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {

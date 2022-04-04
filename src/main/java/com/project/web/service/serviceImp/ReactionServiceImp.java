@@ -43,7 +43,7 @@ public class ReactionServiceImp implements ReactionService {
     }
 
     @Override
-    public void addReactionOfAnIdea(ReactionRequest reaction) {
+    public ResponseEntity<ResponseObject> addReactionOfAnIdea(ReactionRequest reaction) {
         boolean checkExistedIdea = ideaRepo.existsById(reaction.getIdeaId());
         if (!checkExistedIdea) {
             Reaction addReaction = new Reaction();
@@ -59,10 +59,11 @@ public class ReactionServiceImp implements ReactionService {
             addReaction.setLastModifyDate(date);
             reactionRepo.save(addReaction);
         }
+        return null;
     }
 
     @Override
-    public void editReactionOfAnIdea(ReactionRequest reaction) {
+    public ResponseEntity<ResponseObject> editReactionOfAnIdea(ReactionRequest reaction) {
         Optional<Reaction> editReaction = reactionRepo.findById(reaction.getReactionId());
         if (editReaction.isPresent()) {
             Date date = new Date();
@@ -76,10 +77,11 @@ public class ReactionServiceImp implements ReactionService {
             editReaction.get().setLastModifyDate(date);
             reactionRepo.save(editReaction.get());
         }
+        return null;
     }
 
     @Override
-    public void deleteReactionOfAnIdea(DeleteReactionRequest deleteRequest) {
+    public ResponseEntity<ResponseObject> deleteReactionOfAnIdea(DeleteReactionRequest deleteRequest) {
         User user = new User();
         Idea idea = new Idea();
         user.setUserId(deleteRequest.getUserId());
@@ -91,5 +93,6 @@ public class ReactionServiceImp implements ReactionService {
                 reactionRepo.deleteById(checkExistedUserId.get().getReactionId());
             }
         }
+        return null;
     }
 }

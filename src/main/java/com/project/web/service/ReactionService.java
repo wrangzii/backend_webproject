@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface ReactionService {
     ResponseEntity<ResponseObject> getReactionOfAnIdea(Long ideaId);
-    void addReactionOfAnIdea(ReactionRequest reaction);
-    void editReactionOfAnIdea(ReactionRequest reaction);
-    void deleteReactionOfAnIdea(DeleteReactionRequest deleteRequest);
+    ResponseEntity<ResponseObject> addReactionOfAnIdea(ReactionRequest reaction);
+    ResponseEntity<ResponseObject> editReactionOfAnIdea(ReactionRequest reaction);
+    ResponseEntity<ResponseObject> deleteReactionOfAnIdea(DeleteReactionRequest deleteRequest);
 }

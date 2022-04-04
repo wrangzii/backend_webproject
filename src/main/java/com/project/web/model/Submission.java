@@ -1,6 +1,5 @@
 package com.project.web.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,9 +19,7 @@ public class Submission {
     @NotEmpty(message = "*Please provide description name")
     private String description;
     @NotNull
-    @JsonFormat(pattern="mm/dd/yyyy HH:mm:ss")
     private Date closureDate;
     @NotNull
-    @JsonFormat(pattern="mm/dd/yyyy HH:mm:ss")
     private Date finalClosureDate;
 }

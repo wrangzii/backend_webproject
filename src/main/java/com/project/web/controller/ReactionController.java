@@ -25,17 +25,17 @@ public class ReactionController {
     }
 
     @PostMapping("/add")
-    public void addReactionOfAnIdea(@Valid @RequestBody ReactionRequest reaction) {
-        reactionService.addReactionOfAnIdea(reaction);
+    public ResponseEntity<ResponseObject> addReactionOfAnIdea(@Valid @RequestBody ReactionRequest reaction) {
+        return reactionService.addReactionOfAnIdea(reaction);
     }
 
     @PutMapping("/edit")
-    public void editReactionOfAnIdea(@Valid @RequestBody ReactionRequest reaction) {
-        reactionService.editReactionOfAnIdea(reaction);
+    public ResponseEntity<ResponseObject> editReactionOfAnIdea(@Valid @RequestBody ReactionRequest reaction) {
+        return reactionService.editReactionOfAnIdea(reaction);
     }
 
     @DeleteMapping("/delete")
-    public void deleteReactionOfAnIdea(@Valid @RequestBody DeleteReactionRequest deleteRequest) {
-        reactionService.deleteReactionOfAnIdea(deleteRequest);
+    public ResponseEntity<ResponseObject> deleteReactionOfAnIdea(@Valid @RequestBody DeleteReactionRequest deleteRequest) {
+        return reactionService.deleteReactionOfAnIdea(deleteRequest);
     }
 }
