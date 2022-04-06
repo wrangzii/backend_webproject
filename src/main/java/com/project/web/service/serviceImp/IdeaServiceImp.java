@@ -20,8 +20,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +76,7 @@ public class IdeaServiceImp implements IdeaService {
     }
 
     @Override
-    public List<ExportDataResponse> getAllIdeaToExport() {
+    public ResponseEntity<ResponseObject> getAllIdeaToExport(HttpServletResponse response) throws IOException {
         List<Idea> ideas = ideaRepo.findAll();
         ExportDataResponse data = new ExportDataResponse();
         List<ExportDataResponse> dataExport = new ArrayList<>();
@@ -88,7 +94,26 @@ public class IdeaServiceImp implements IdeaService {
 
             dataExport.add(data);
         }
-        return dataExport;
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=ideas_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = {"Username", "Idea ID", "Submission Id", "Category Name", "title", "Description", "view count", "Create date", "Modify date", "Is anonymous"};
+        String[] nameMapping = {"username", "ideaId", "submissionId", "categoryName", "title", "description", "viewCount", "createDate", "modifyDate", "isAnonymous"};
+        csvWriter.writeHeader(csvHeader);
+
+        for (ExportDataResponse idea : dataExport) {
+            csvWriter.write(idea, nameMapping);
+        }
+
+        csvWriter.close();
+
+        return null;
     }
 
     @Override
