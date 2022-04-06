@@ -152,7 +152,6 @@ public class UserServiceImp implements UserService {
         Optional<User> editUser = userRepo.findById(id);
         if (editUser.isPresent()){
             editUser.get().setEmail(user.getEmail());
-            editUser.get().setUsername(user.getUsername());
             editUser.get().setFullName(user.getFullName());
             editUser.get().setPassword(encoder.encode(user.getPassword()));
             editUser.get().setDateOfBirth(user.getDateOfBirth());

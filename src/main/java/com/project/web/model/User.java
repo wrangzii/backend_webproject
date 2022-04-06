@@ -1,6 +1,5 @@
 package com.project.web.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -26,7 +25,6 @@ public class User {
     private String fullName;
     @NotEmpty(message = "*Please provide phone number")
     private String phoneNumber;
-    @JsonFormat(pattern="mm/dd/yyyy HH:mm:ss")
     private Date dateOfBirth;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",

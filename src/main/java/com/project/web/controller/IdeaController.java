@@ -36,7 +36,7 @@ public class IdeaController {
     @PostMapping(value = "/add",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE} )
-    public ResponseEntity<ResponseObject> addIdea(@Valid @ModelAttribute SubmitIdeaRequest idea, @RequestBody MultipartFile file) throws Exception {
+    public ResponseEntity<ResponseObject> addIdea(@Valid @ModelAttribute SubmitIdeaRequest idea, MultipartFile file) throws Exception {
         return ideaService.addIdea(idea, file);
     }
 

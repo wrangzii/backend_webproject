@@ -31,7 +31,7 @@ public class ReactionServiceImp implements ReactionService {
         List<Reaction> reactionList = reactionRepo.findByIdeaId(ideaId);
         List<ReactionResponse> response = new ArrayList<>();
         ReactionResponse reactionResponse = new ReactionResponse();
-        if (reactionList != null) {
+        if (reactionList.size() > 0) {
             for (Reaction reaction : reactionList) {
                 reactionResponse.setUsername(reaction.getUserId().getUsername());
                 reactionResponse.setReactionType(reaction.getReactionType());
@@ -58,8 +58,9 @@ public class ReactionServiceImp implements ReactionService {
             addReaction.setCreateDate(date);
             addReaction.setLastModifyDate(date);
             reactionRepo.save(addReaction);
+            return ResponseEntity.ok(new ResponseObject("Success!"));
         }
-        return null;
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Reaction has existed!"));
     }
 
     @Override
@@ -76,8 +77,9 @@ public class ReactionServiceImp implements ReactionService {
             editReaction.get().setReactionType(reaction.getReactionType());
             editReaction.get().setLastModifyDate(date);
             reactionRepo.save(editReaction.get());
+            return ResponseEntity.ok(new ResponseObject("Success!"));
         }
-        return null;
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Reaction has not existed!"));
     }
 
     @Override
@@ -91,8 +93,9 @@ public class ReactionServiceImp implements ReactionService {
             Boolean checkExistedIdea = reactionRepo.existsByIdeaId(idea);
             if (checkExistedIdea) {
                 reactionRepo.deleteById(checkExistedUserId.get().getReactionId());
+                return ResponseEntity.ok(new ResponseObject("Success!"));
             }
         }
-        return null;
+        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Reaction has not existed!"));
     }
 }
