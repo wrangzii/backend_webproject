@@ -44,14 +44,14 @@ public class ReactionServiceImp implements ReactionService {
 
     @Override
     public ResponseEntity<ResponseObject> addReactionOfAnIdea(ReactionRequest reaction) {
-        boolean checkExistedIdea = ideaRepo.existsById(reaction.getIdeaId());
-        if (!checkExistedIdea) {
-            Reaction addReaction = new Reaction();
-            Date date = new Date();
-            Idea idea = new Idea();
-            idea.setIdeaId(reaction.getIdeaId());
-            User user = new User();
-            user.setUserId(reaction.getUserId());
+        Reaction addReaction = new Reaction();
+        Date date = new Date();
+        Idea idea = new Idea();
+        idea.setIdeaId(reaction.getIdeaId());
+        User user = new User();
+        user.setUserId(reaction.getUserId());
+        Reaction checkExistedIdea = reactionRepo.findByIdeaIdAndUserId(idea, user);
+        if (checkExistedIdea != null) {
             addReaction.setIdeaId(idea);
             addReaction.setUserId(user);
             addReaction.setReactionType(reaction.getReactionType());

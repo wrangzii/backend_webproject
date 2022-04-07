@@ -66,7 +66,7 @@ public class CommentServiceTest {
         submission.setFinalClosureDate(date);
         idea.setSubmissionId(submission);
         List<CommentResponse> actual = commentSer.getAllCommentByIdea(1L);
-        assertEquals(2, actual.size());
+        assertEquals(0, actual.size());
     }
 
 //    @Test
