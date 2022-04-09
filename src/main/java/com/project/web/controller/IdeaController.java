@@ -64,4 +64,13 @@ public class IdeaController {
         return ideaService.getLatestIdeas(pageNumber);
     }
 
+    @GetMapping("/sortByViewCount")
+    public List<Idea> getIdeaByViewCount(@RequestParam int pageNumber) {
+        return ideaService.sortByViewCount(pageNumber);
+    }
+
+    @GetMapping("/sortIdeaByLatestComment")
+    public List<Idea> sortIdeaByLatestComment(@RequestParam int pageNumber) {
+        return ideaService.sortIdeaByLatestComment(pageNumber);
+    }
 }

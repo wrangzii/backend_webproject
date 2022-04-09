@@ -42,14 +42,12 @@ public class IdeaServiceImp implements IdeaService {
     private final CategoryRepository categoryRepository;
     private final SubmissionRepository submissionRepo;
     private final EmailSenderService emailSenderService;
-    private final DepartmentRepository departmentRepo;
-
+    private final Integer pageSize = 5;
     @Autowired
     DropboxService dropboxService;
 
     @Override
     public List<Idea> getAllIdea(Integer pageNumber) {
-        int pageSize = 5;
         Pageable paging = PageRequest.of(pageNumber,pageSize);
 
         Page<Idea> pagedResult = ideaRepo.findAll(paging);
@@ -63,8 +61,7 @@ public class IdeaServiceImp implements IdeaService {
 
     @Override
     public List<Idea> getLatestIdeas(int pageNumber) {
-        int pageSize = 5;
-        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC,"createDate"));
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by("createDate").descending());
 
         Page<Idea> pagedResult = ideaRepo.findAll(paging);
 
@@ -76,8 +73,34 @@ public class IdeaServiceImp implements IdeaService {
     }
 
     @Override
+    public List<Idea> sortByViewCount(Integer pageNumber) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by("viewCount").descending());
+
+        Page<Idea> pagedResult = ideaRepo.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Idea> sortIdeaByLatestComment(Integer pageNumber) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+
+        Page<Idea> pagedResult = ideaRepo.sortByLatestComment(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
     public ResponseEntity<ResponseObject> getAllIdeaToExport(HttpServletResponse response) throws IOException {
-        List<Idea> ideas = ideaRepo.findAll();
+        Iterable<Idea> ideas = ideaRepo.findAll();
         ExportDataResponse data = new ExportDataResponse();
         List<ExportDataResponse> dataExport = new ArrayList<>();
         for (Idea idea : ideas) {

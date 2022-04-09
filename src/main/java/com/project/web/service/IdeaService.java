@@ -14,6 +14,8 @@ import java.util.List;
 public interface IdeaService {
     List<Idea> getAllIdea(Integer pageNumber);
     List<Idea> getLatestIdeas(int pageNumber);
+    List<Idea> sortByViewCount(Integer pageNumber);
+    List<Idea> sortIdeaByLatestComment(Integer number);
     ResponseEntity<ResponseObject> getAllIdeaToExport(HttpServletResponse response) throws IOException;
     ResponseEntity<ResponseObject> getIdeaById(Long id);
     ResponseEntity<ResponseObject> addIdea(SubmitIdeaRequest idea, MultipartFile file) throws Exception;

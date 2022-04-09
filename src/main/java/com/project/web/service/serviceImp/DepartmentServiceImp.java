@@ -24,7 +24,7 @@ public class DepartmentServiceImp implements DepartmentService {
     @Override
     public List<Department> getAllDepartment(Integer pageNumber) {
         int pageSize = 10;
-        Pageable paging = PageRequest.of(pageNumber,pageSize);
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
         Page<Department> pagedResult = departmentRepo.findAll(paging);
 
         if(pagedResult.hasContent()) {
