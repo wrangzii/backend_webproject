@@ -23,6 +23,5 @@ public class SignupRequest {
     private String fullName;
     private Long departmentId;
     @NotBlank
-    @Size(min = 6, max = 40)
     private String password;
 }

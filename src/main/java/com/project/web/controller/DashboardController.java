@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class DashboardController {
     }
 
     @GetMapping("/report")
-    public List<IdeaRepository.IdeaReport> getDataForReport() {
-        return dashboardSer.getDataForReport();
+    public List<IdeaRepository.IdeaReport> getDataForReport(HttpServletResponse response) throws IOException {
+        return dashboardSer.getDataForReport(response);
     }
 }
