@@ -12,5 +12,6 @@ public interface DashboardService {
     List<DepartmentRepository.IdeaChart> getIdeaDataForChart();
     List<CategoryRepository.CategoryChart> getIdeaOfCateDataForChart();
     List<IdeaRepository.IdeaReport> getDataForReport(HttpServletResponse response) throws IOException;
+    List<IdeaRepository.IdeaReport> getDataForReportObject(HttpServletResponse response) throws IOException;
 
 }

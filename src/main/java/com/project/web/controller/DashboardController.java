@@ -35,4 +35,9 @@ public class DashboardController {
     public List<IdeaRepository.IdeaReport> getDataForReport(HttpServletResponse response) throws IOException {
         return dashboardSer.getDataForReport(response);
     }
+
+    @GetMapping("/report/object")
+    public List<IdeaRepository.IdeaReport> getDataForReportObject(HttpServletResponse response) throws IOException {
+        return dashboardSer.getDataForReportObject(response);
+    }
 }

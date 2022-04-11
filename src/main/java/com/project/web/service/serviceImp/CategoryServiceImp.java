@@ -91,7 +91,7 @@ public class CategoryServiceImp implements CategoryService {
         Optional<Category> categoryExists = cateRepo.findById(id);
         if (categoryExists.isPresent()) {
             dropboxService.downloadFile( categoryExists.get().getCateName() + ".zip");
-            return ResponseEntity.ok().body(new ResponseObject("Download successfully!"));
+             return ResponseEntity.ok().body(new ResponseObject("Download successfully!"));
         }
         return ResponseEntity.badRequest().body(new ResponseObject("Download fail!"));
     }

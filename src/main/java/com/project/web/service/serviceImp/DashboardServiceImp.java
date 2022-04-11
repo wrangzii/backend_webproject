@@ -70,4 +70,13 @@ public class DashboardServiceImp implements DashboardService {
 
         return null;
     }
+
+    @Override
+    public List<IdeaRepository.IdeaReport> getDataForReportObject(HttpServletResponse response) {
+        List<IdeaRepository.IdeaReport> ideas = ideaRepo.getReport();
+        if (ideas.size() > 0) {
+            return ideas;
+        }
+        return null;
+    }
 }
