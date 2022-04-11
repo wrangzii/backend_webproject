@@ -39,9 +39,9 @@ public class DashboardServiceImp implements DashboardService {
     @Override
     public List<IdeaRepository.IdeaReport> getDataForReport(HttpServletResponse response) throws IOException {
         List<IdeaRepository.IdeaReport> ideas = ideaRepo.getReport();
-        IdeaReport data = new IdeaReport();
         List<IdeaReport> dataExport = new ArrayList<>();
         for (IdeaRepository.IdeaReport idea : ideas) {
+            IdeaReport data = new IdeaReport();
             data.setIsAnonymous(idea.getIsAnonymous());
             data.setIdea(idea.getTitle());
             data.setCategory(idea.getCategory());
