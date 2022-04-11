@@ -90,7 +90,7 @@ public class ReactionServiceTest {
         idea.setIdeaId(reactionRequest.getIdeaId());
         Optional<Reaction> reactionOpt = Optional.of(reaction);
         when(reactionRepo.findByUserId(user)).thenReturn(reactionOpt);
-        when(reactionRepo.existsByIdeaId(idea)).thenReturn(true);
+        when(reactionRepo.existsByIdeaId(idea)).thenReturn(null);
         ResponseEntity<ResponseObject> actual = reactionService.deleteReactionOfAnIdea(reactionRequest);
         assertEquals("Success!", Objects.requireNonNull(actual.getBody()).getMessage());
     }

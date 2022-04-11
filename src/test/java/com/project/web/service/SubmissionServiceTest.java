@@ -113,6 +113,7 @@ public class SubmissionServiceTest {
         ResponseEntity<ResponseObject> actual = submissionService.editSubmission(submission, 1L);
         assertEquals("Edit submission successfully!", Objects.requireNonNull(actual.getBody()).getMessage());
     }
+
     @Test
     void editSubmissionWithSubmissionHasNotExisted_thenReturnAMessageError() {
         Submission submission = new Submission();

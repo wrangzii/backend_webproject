@@ -118,15 +118,6 @@ public class CategoryServiceTest {
         assertEquals("Download fail!", Objects.requireNonNull(actual.getBody()).getMessage());
     }
 
-//    @Test
-//    void downloadAllFileIdeaWithCategoryHasExisted_thenReturnAMessageSuccess() throws IOException, DbxException {
-//        Category deleteCategory = new Category();
-//        deleteCategory.setCateName("test");
-//        Optional<Category> cateOpt = Optional.of(deleteCategory);
-//        when(cateRepo.findById(1L)).thenReturn(cateOpt);
-//        ResponseEntity<ResponseObject> actual = categoryService.downloadAllFileIdea(1L);
-//        assertEquals("Download successfully!", Objects.requireNonNull(actual.getBody()).getMessage());
-//    }
     @Test
     void editCategoryWithCategoryHasExisted_thenReturnAMessageSuccess() throws IOException, DbxException {
         Category editCate = new Category();
@@ -138,6 +129,7 @@ public class CategoryServiceTest {
         ResponseEntity<ResponseObject> actual = categoryService.editCategory(categoryInput, 1L);
         assertEquals("Edit category successfully!", Objects.requireNonNull(actual.getBody()).getMessage());
     }
+
     @Test
     void editCategoryWithCategoryHasNotExisted_thenReturnAMessageError() throws IOException, DbxException {
         CategoryRequest categoryInput = new CategoryRequest();
