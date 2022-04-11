@@ -37,7 +37,7 @@ import java.util.Optional;
 @Slf4j
 @CrossOrigin("http://localhost:3000")
 public class CategoryController {
-    private static final String DIRECTORY = "/Users/wrangz/Documents/collecting-idea-project/backend_webproject/build/tmp";
+    private static final String DIRECTORY = "../backend_webproject/build/tmp";
     @Autowired
     DropboxService dropboxService;
     @Autowired
@@ -84,7 +84,7 @@ public class CategoryController {
         String fileName = categoryExists.get().getCateName() + ".zip";
         categoryExists.ifPresent(category -> {
             try {
-                OutputStream out = new FileOutputStream("/Users/wrangz/Documents/collecting-idea-project/backend_webproject/build/tmp/" + fileName);
+                OutputStream out = new FileOutputStream("../backend_webproject/build/tmp/" + fileName);
                 dropboxClient.files().downloadZipBuilder("/" + fileName).download(out);
                 dropboxClient.files().downloadZipBuilder("/" + category.getCateName() + ".zip").download(outputStream);
             } catch (DbxException | IOException e) {
