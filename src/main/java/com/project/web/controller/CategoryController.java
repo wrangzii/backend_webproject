@@ -77,11 +77,6 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('QA_MANAGER')")
     @GetMapping("/download/{cateId}")
-    public ResponseEntity<ResponseObject> downloadFile(@PathVariable Long cateId) throws Exception {
-        return cateSer.downloadAllFileIdea(cateId);
-    }
-
-    @GetMapping("/download2/{cateId}")
     public ResponseEntity<ByteArrayResource> downloadFile2(
             @PathVariable Long cateId) throws IOException {
         Optional<Category> categoryExists = cateRepo.findById(cateId);
