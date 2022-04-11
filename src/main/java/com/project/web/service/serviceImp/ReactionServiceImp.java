@@ -7,7 +7,6 @@ import com.project.web.payload.request.DeleteReactionRequest;
 import com.project.web.payload.request.ReactionRequest;
 import com.project.web.payload.response.ReactionResponse;
 import com.project.web.payload.response.ResponseObject;
-import com.project.web.repository.IdeaRepository;
 import com.project.web.repository.ReactionRepository;
 import com.project.web.service.ReactionService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReactionServiceImp implements ReactionService {
     private final ReactionRepository reactionRepo;
-    private final IdeaRepository ideaRepo;
 
     @Override
     public ResponseEntity<ResponseObject> getReactionOfAnIdea(Long ideaId) {
@@ -51,7 +49,7 @@ public class ReactionServiceImp implements ReactionService {
         User user = new User();
         user.setUserId(reaction.getUserId());
         Reaction checkExistedIdea = reactionRepo.findByIdeaIdAndUserId(idea, user);
-        if (checkExistedIdea != null) {
+        if (checkExistedIdea == null) {
             addReaction.setIdeaId(idea);
             addReaction.setUserId(user);
             addReaction.setReactionType(reaction.getReactionType());

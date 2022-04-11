@@ -4,6 +4,7 @@ import com.project.web.model.Department;
 import com.project.web.model.ERole;
 import com.project.web.model.Role;
 import com.project.web.model.User;
+import com.project.web.payload.request.EditUserRequest;
 import com.project.web.payload.request.LoginRequest;
 import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.JwtResponse;
@@ -148,12 +149,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> updateUser(SignupRequest user, Long id) {
+    public ResponseEntity<ResponseObject> updateUser(EditUserRequest user, Long id) {
         Optional<User> editUser = userRepo.findById(id);
         if (editUser.isPresent()){
             editUser.get().setEmail(user.getEmail());
             editUser.get().setFullName(user.getFullName());
-            editUser.get().setPassword(encoder.encode(user.getPassword()));
             editUser.get().setDateOfBirth(user.getDateOfBirth());
             editUser.get().setPhoneNumber(user.getPhoneNumber());
             editUser.get().setEnabled(true);

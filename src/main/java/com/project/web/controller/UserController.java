@@ -1,6 +1,7 @@
 package com.project.web.controller;
 
 import com.project.web.model.User;
+import com.project.web.payload.request.EditUserRequest;
 import com.project.web.payload.request.SignupRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.UserService;
@@ -38,7 +39,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseObject> updateUser(@Valid @RequestBody  SignupRequest user, @PathVariable Long id){
+    public ResponseEntity<ResponseObject> updateUser(@Valid @RequestBody EditUserRequest user, @PathVariable Long id){
         return  userSer.updateUser(user,id);
     }
 
