@@ -200,9 +200,6 @@ public class IdeaServiceImp implements IdeaService {
         Optional<Idea> deleteIdea = ideaRepo.findById(id);
             if (deleteIdea.isPresent()) {
                 Optional<File> deleteFile = fileRepo.findById(deleteIdea.get().getIdeaId());
-                if (deleteFile.isPresent()) {
-                    dropboxService.deleteFile(deleteFile.get().getFilePath());
-                }
                 deleteFile.ifPresent(file -> fileRepo.deleteById(file.getFileId()));
                 ideaRepo.deleteById(id);
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Delete idea successfully!"));
