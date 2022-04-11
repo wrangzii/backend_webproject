@@ -17,4 +17,5 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
     Reaction findByIdeaIdAndUserId(Idea ideaId, User userid);
     @Query(value = "SELECT * FROM reactions WHERE idea_id =?1", nativeQuery = true)
     Reaction existsByIdeaId(Idea ideaId);
+    Long deleteByIdeaId(Idea ideaId);
 }

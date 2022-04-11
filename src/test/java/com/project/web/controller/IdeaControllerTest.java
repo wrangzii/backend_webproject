@@ -94,7 +94,7 @@ public class IdeaControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void deleteIdeaSuccess_thenReturn200() throws Exception {
-        when(ideaService.deleteIdea(1L)).thenReturn(null);
+        when(ideaService.deleteIdea(1L, 2L)).thenReturn(null);
         MockHttpServletResponse response = mockMvc.perform(delete("/submit_idea/delete/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();

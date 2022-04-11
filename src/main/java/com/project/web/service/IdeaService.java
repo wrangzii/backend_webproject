@@ -19,7 +19,7 @@ public interface IdeaService {
     ResponseEntity<ResponseObject> getAllIdeaToExport(HttpServletResponse response) throws IOException;
     ResponseEntity<ResponseObject> getIdeaById(Long id);
     ResponseEntity<ResponseObject> addIdea(SubmitIdeaRequest idea, MultipartFile file) throws Exception;
-    ResponseEntity<ResponseObject> deleteIdea(Long id) throws DbxException;
+    ResponseEntity<ResponseObject> deleteIdea(Long ideaId, Long userId) throws DbxException;
     ResponseEntity<ResponseObject> addViewCount(Long id);
     ResponseEntity<ResponseObject> editIdea(SubmitIdeaRequest idea, MultipartFile file, Long id) throws IOException, DbxException;
 }

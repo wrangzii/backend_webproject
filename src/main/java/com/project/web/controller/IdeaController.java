@@ -44,9 +44,10 @@ public class IdeaController {
     public ResponseEntity<ResponseObject> editIdea(@Valid @ModelAttribute SubmitIdeaRequest idea, @RequestBody MultipartFile file, @PathVariable Long id) throws IOException, DbxException {
         return ideaService.editIdea(idea, file, id);
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseObject> deleteIdea(@PathVariable Long id) throws DbxException {
-        return ideaService.deleteIdea(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseObject> deleteIdea(@RequestParam Long ideaId,
+                                                     @RequestParam Long userId) throws DbxException {
+        return ideaService.deleteIdea(ideaId, userId);
     }
 
     @GetMapping("/export")

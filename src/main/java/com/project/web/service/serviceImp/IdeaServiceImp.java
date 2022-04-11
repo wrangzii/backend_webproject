@@ -42,6 +42,7 @@ public class IdeaServiceImp implements IdeaService {
     private final CategoryRepository categoryRepository;
     private final SubmissionRepository submissionRepo;
     private final EmailSenderService emailSenderService;
+    private final ReactionRepository reactionRepo;
     private final Integer pageSize = 5;
     @Autowired
     DropboxService dropboxService;
@@ -196,13 +197,24 @@ public class IdeaServiceImp implements IdeaService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> deleteIdea(Long id) throws DbxException {
-        Optional<Idea> deleteIdea = ideaRepo.findById(id);
+    public ResponseEntity<ResponseObject> deleteIdea(Long ideaId, Long userId) throws DbxException {
+        Optional<Idea> deleteIdea = ideaRepo.findById(ideaId);
+        Optional<User> userOpt = userRepo.findById(userId);
+        User user = new User();
+        user.setUserId(userId);
+        Idea idea = new Idea();
+        idea.setIdeaId(ideaId);
+        if (userOpt.isPresent()) {
             if (deleteIdea.isPresent()) {
+                Reaction deleteReaction = reactionRepo.findByIdeaIdAndUserId(idea, user);
+                if (deleteReaction != null) {
+                    reactionRepo.deleteByIdeaId(idea);
+                }
                 Optional<File> deleteFile = fileRepo.findById(deleteIdea.get().getIdeaId());
                 deleteFile.ifPresent(file -> fileRepo.deleteById(file.getFileId()));
-                ideaRepo.deleteById(id);
-            return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Delete idea successfully!"));
+                ideaRepo.deleteById(ideaId);
+                return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(), "Delete idea successfully!"));
+            }
         }
         return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: The idea is not exist!"));
     }
