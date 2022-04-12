@@ -210,8 +210,12 @@ public class IdeaServiceImp implements IdeaService {
                 if (deleteReaction != null) {
                     reactionRepo.deleteByIdeaId(idea);
                 }
-                Optional<File> deleteFile = fileRepo.findById(deleteIdea.get().getIdeaId());
-                deleteFile.ifPresent(file -> fileRepo.deleteById(file.getFileId()));
+                Idea idea1 = new Idea();
+                idea1.setIdeaId(deleteIdea.get().getIdeaId());
+                List<File> deleteFile = fileRepo.findByIdeaId(idea1);
+                for (File file1 : deleteFile) {
+                    fileRepo.deleteById(file1.getFileId());
+                }
                 ideaRepo.deleteById(ideaId);
                 return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(), "Delete idea successfully!"));
             }
@@ -245,8 +249,10 @@ public class IdeaServiceImp implements IdeaService {
                     Submission submit = new Submission();
                     User user = new User();
                     if (existedUser.isPresent()) {
-                        filePath = "/" + category.get().getCateName() + ".zip/" + existedUser.get().getUsername() + "_idea" + "/" + file.getOriginalFilename();
-                        dropboxService.uploadFile(file, filePath);
+                        if (file != null) {
+                            filePath = "/" + category.get().getCateName() + ".zip/" + existedUser.get().getUsername() + "_idea" + "/" + file.getOriginalFilename();
+                            dropboxService.uploadFile(file, filePath);
+                        }
                         user.setUserId(idea.getUserId());
                         cate.setCateId(idea.getCateId());
                         editIdea.get().setDescription(idea.getDescription());
@@ -267,7 +273,7 @@ public class IdeaServiceImp implements IdeaService {
                         fileModel.setIdeaId(idea1);
                         fileRepo.save(fileModel);
                     }
-                    return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(), "Add idea successfully!", editIdea));
+                    return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(), "Edit idea successfully!", editIdea));
                 }
             }
         }

@@ -1,7 +1,11 @@
 package com.project.web.repository;
 
 import com.project.web.model.File;
+import com.project.web.model.Idea;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FileRepository extends JpaRepository<File, Long> {
+import java.util.List;
+
+public interface FileRepository<findByIdeaId> extends JpaRepository<File, Long> {
+    List<File> findByIdeaId(Idea ideaId);
 }
