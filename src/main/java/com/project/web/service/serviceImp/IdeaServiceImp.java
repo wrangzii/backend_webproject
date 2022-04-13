@@ -102,9 +102,9 @@ public class IdeaServiceImp implements IdeaService {
     @Override
     public ResponseEntity<ResponseObject> getAllIdeaToExport(HttpServletResponse response) throws IOException {
         Iterable<Idea> ideas = ideaRepo.findAll();
-        ExportDataResponse data = new ExportDataResponse();
         List<ExportDataResponse> dataExport = new ArrayList<>();
         for (Idea idea : ideas) {
+            ExportDataResponse data = new ExportDataResponse();
             data.setIdeaId(idea.getIdeaId());
             data.setUsername(idea.getUserId().getUsername());
             data.setSubmissionId(idea.getSubmissionId().getSubmissionId());
@@ -163,8 +163,10 @@ public class IdeaServiceImp implements IdeaService {
                 Submission submit = new Submission();
                 User user = new User();
                 if (existedUser.isPresent()) {
-                    filePath = "/" + category.get().getCateName() + ".zip/" + existedUser.get().getUsername() + "_idea" + "/" + file.getOriginalFilename();
-                    dropboxService.uploadFile(file, filePath);
+                    if (file != null) {
+                        filePath = "/" + category.get().getCateName() + ".zip/" + existedUser.get().getUsername() + "_idea" + "/" + file.getOriginalFilename();
+                        dropboxService.uploadFile(file, filePath);
+                    }
                     user.setUserId(idea.getUserId());
                     cate.setCateId(idea.getCateId());
                     addIdea.setDescription(idea.getDescription());
