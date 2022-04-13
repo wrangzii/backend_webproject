@@ -213,8 +213,10 @@ public class IdeaServiceImp implements IdeaService {
                 Idea idea1 = new Idea();
                 idea1.setIdeaId(deleteIdea.get().getIdeaId());
                 List<File> deleteFile = fileRepo.findByIdeaId(idea1);
-                for (File file1 : deleteFile) {
-                    fileRepo.deleteById(file1.getFileId());
+                if (deleteFile != null) {
+                    for (File file1 : deleteFile) {
+                        fileRepo.deleteById(file1.getFileId());
+                    }
                 }
                 ideaRepo.deleteById(ideaId);
                 return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(), "Delete idea successfully!"));
