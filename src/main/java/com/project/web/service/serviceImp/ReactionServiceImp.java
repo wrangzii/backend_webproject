@@ -96,10 +96,10 @@ public class ReactionServiceImp implements ReactionService {
         User user = new User();
         Idea idea = new Idea();
         user.setUserId(deleteRequest.getUserId());
-        Optional<Reaction> checkExistedUserId = reactionRepo.findByUserId(user);
-        if (checkExistedUserId.isPresent()) {
-            idea.setIdeaId(deleteRequest.getIdeaId());
-            reactionRepo.deleteById(checkExistedUserId.get().getReactionId());
+        idea.setIdeaId(deleteRequest.getIdeaId());
+        Reaction checkExistedUserId = reactionRepo.findByIdeaIdAndUserId(idea, user);
+        if (checkExistedUserId != null) {
+            reactionRepo.deleteById(checkExistedUserId.getReactionId());
 
             return ResponseEntity.ok(new ResponseObject("Success!"));
         }

@@ -43,6 +43,7 @@ public class IdeaServiceImp implements IdeaService {
     private final SubmissionRepository submissionRepo;
     private final EmailSenderService emailSenderService;
     private final ReactionRepository reactionRepo;
+    private final CommentRepository commentRepo;
     private final Integer pageSize = 5;
     @Autowired
     DropboxService dropboxService;
@@ -218,6 +219,13 @@ public class IdeaServiceImp implements IdeaService {
                 if (deleteFile != null) {
                     for (File file1 : deleteFile) {
                         fileRepo.deleteById(file1.getFileId());
+                    }
+                }
+                Comment comment = new Comment();
+                List<Comment> checkCommentExists = commentRepo.findCommentByIdeaId(idea1);
+                if (checkCommentExists != null) {
+                    for (Comment comment1 : checkCommentExists) {
+                        commentRepo.deleteById(comment1.getCommentId());
                     }
                 }
                 ideaRepo.deleteById(ideaId);
