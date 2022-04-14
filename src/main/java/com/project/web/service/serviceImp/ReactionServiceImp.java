@@ -60,8 +60,16 @@ public class ReactionServiceImp implements ReactionService {
             addReaction.setLastModifyDate(date);
             reactionRepo.save(addReaction);
             return ResponseEntity.ok(new ResponseObject("Success!"));
+        } else {
+            reactionRepo.deleteById(checkExistedIdea.getReactionId());
+            addReaction.setIdeaId(idea);
+            addReaction.setUserId(user);
+            addReaction.setReactionType(reaction.getReactionType());
+            addReaction.setCreateDate(date);
+            addReaction.setLastModifyDate(date);
+            reactionRepo.save(addReaction);
+            return ResponseEntity.ok(new ResponseObject("Success!"));
         }
-        return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.toString(),"Error: Reaction has existed!"));
     }
 
     @Override
