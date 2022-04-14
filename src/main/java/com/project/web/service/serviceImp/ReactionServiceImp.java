@@ -8,6 +8,7 @@ import com.project.web.payload.request.ReactionRequest;
 import com.project.web.payload.response.ReactionResponse;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.ReactionRepository;
+import com.project.web.repository.UserRepository;
 import com.project.web.service.ReactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,14 +24,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReactionServiceImp implements ReactionService {
     private final ReactionRepository reactionRepo;
+    private final UserRepository userRepo;
 
     @Override
     public ResponseEntity<ResponseObject> getReactionOfAnIdea(Long ideaId) {
         List<Reaction> reactionList = reactionRepo.findByIdeaId(ideaId);
         List<ReactionResponse> response = new ArrayList<>();
-        ReactionResponse reactionResponse = new ReactionResponse();
         if (reactionList.size() > 0) {
             for (Reaction reaction : reactionList) {
+                ReactionResponse reactionResponse = new ReactionResponse();
+                reactionResponse.setReactionId(reaction.getReactionId());
                 reactionResponse.setUsername(reaction.getUserId().getUsername());
                 reactionResponse.setReactionType(reaction.getReactionType());
                 response.add(reactionResponse);
