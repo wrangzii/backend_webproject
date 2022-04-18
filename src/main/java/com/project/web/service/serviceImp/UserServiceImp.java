@@ -4,9 +4,7 @@ import com.project.web.model.Department;
 import com.project.web.model.ERole;
 import com.project.web.model.Role;
 import com.project.web.model.User;
-import com.project.web.payload.request.EditUserRequest;
-import com.project.web.payload.request.LoginRequest;
-import com.project.web.payload.request.SignupRequest;
+import com.project.web.payload.request.*;
 import com.project.web.payload.response.JwtResponse;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.RoleRepository;
@@ -171,7 +169,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> forgotPassword(User user) {
+    public ResponseEntity<ResponseObject> forgotPassword(ForgotPasswordRequest user) {
         Optional<User> existedUser = userRepo.findByEmail(user.getEmail());
         if (existedUser.isPresent()) {
             // Save it
@@ -197,7 +195,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> resetUserPassword(User user, String confirmationToken) {
+    public ResponseEntity<ResponseObject> resetUserPassword(ResetUserPassword user, String confirmationToken) {
         User resetPasswordToken = userRepo.findByResetPasswordToken(confirmationToken);
 
         if (resetPasswordToken != null) {

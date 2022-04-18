@@ -2,6 +2,7 @@ package com.project.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.web.model.Department;
+import com.project.web.payload.request.DepartmentRequest;
 import com.project.web.service.DepartmentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,7 @@ public class DepartmentControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void addCommentWithInputParams_thenReturn200() throws Exception {
-        Department department = new Department();
+        DepartmentRequest department = new DepartmentRequest();
         department.setDepartmentName("Test");
         String jsonInput = mapper.writeValueAsString(department);
         when(departmentSer.addDepartment(department)).thenReturn(null);
@@ -69,7 +70,7 @@ public class DepartmentControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void addCommentWithoutInputParams_thenReturn200() throws Exception {
-        Department department = new Department();
+        DepartmentRequest department = new DepartmentRequest();
         when(departmentSer.addDepartment(department)).thenReturn(null);
         MockHttpServletResponse response = mockMvc.perform(post("/department/add")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -80,7 +81,7 @@ public class DepartmentControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void editCommentWithoutInputParams_thenReturn400() throws Exception {
-        Department department = new Department();
+        DepartmentRequest department = new DepartmentRequest();
         when(departmentSer.editDepartment(department, null)).thenReturn(null);
         MockHttpServletResponse response = mockMvc.perform(put("/department/edit/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -91,7 +92,7 @@ public class DepartmentControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void editCommentWithInputParams_thenReturn200() throws Exception {
-        Department department = new Department();
+        DepartmentRequest department = new DepartmentRequest();
         department.setDepartmentName("test");
         String jsonInput = mapper.writeValueAsString(department);
         when(departmentSer.editDepartment(department, 1L)).thenReturn(null);

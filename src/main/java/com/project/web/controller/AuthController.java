@@ -1,7 +1,8 @@
 package com.project.web.controller;
 
-import com.project.web.model.User;
+import com.project.web.payload.request.ForgotPasswordRequest;
 import com.project.web.payload.request.LoginRequest;
+import com.project.web.payload.request.ResetUserPassword;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,12 @@ public class AuthController {
     }
 
     @PostMapping("/forgot_password")
-    public ResponseEntity<ResponseObject> forgotUserPassword(@RequestBody User user) {
+    public ResponseEntity<ResponseObject> forgotUserPassword(@RequestBody ForgotPasswordRequest user) {
         return userSer.forgotPassword(user);
     }
 
     @PostMapping("/confirm_reset")
-    public ResponseEntity<ResponseObject> resetUserPassword(@RequestParam("token")String confirmationToken, @RequestBody User user) {
+    public ResponseEntity<ResponseObject> resetUserPassword(@RequestParam("token")String confirmationToken, @RequestBody ResetUserPassword user) {
         return userSer.resetUserPassword(user, confirmationToken);
     }
 }

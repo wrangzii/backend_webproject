@@ -2,6 +2,7 @@ package com.project.web.service;
 
 import com.dropbox.core.DbxException;
 import com.project.web.model.Department;
+import com.project.web.payload.request.DepartmentRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.DepartmentRepository;
 import org.junit.jupiter.api.Test;
@@ -72,7 +73,7 @@ public class DepartmentServiceTest {
 
     @Test
     void addDepartmentWithDepartmentNameHasExisted_thenReturnError() {
-        Department department = new Department();
+        DepartmentRequest department = new DepartmentRequest();
         department.setDepartmentName("test");
         when(departmentRepo.existsByDepartmentName("test")).thenReturn(true);
         ResponseEntity<ResponseObject> actual = departmentService.addDepartment(department);
@@ -81,7 +82,7 @@ public class DepartmentServiceTest {
 
     @Test
     void addDepartmentWithDepartmentNameHasExisted_thenReturnAnObject() {
-        Department department = new Department();
+        DepartmentRequest department = new DepartmentRequest();
         department.setDepartmentName("test");
         when(departmentRepo.existsByDepartmentName("test")).thenReturn(false);
         ResponseEntity<ResponseObject> actual = departmentService.addDepartment(department);
@@ -108,16 +109,17 @@ public class DepartmentServiceTest {
 
     @Test
     void editDepartmentWithDepartmentHasExisted_thenReturnAMessageSuccess() throws IOException, DbxException {
-        Department department = new Department();
+        DepartmentRequest department = new DepartmentRequest();
+        Department department1 = new Department();
         department.setDepartmentName("test");
-        Optional<Department> departmentOpt = Optional.of(department);
+        Optional<Department> departmentOpt = Optional.of(department1);
         when(departmentRepo.findById(1L)).thenReturn(departmentOpt);
         ResponseEntity<ResponseObject> actual = departmentService.editDepartment(department, 1L);
         assertEquals("Edit Department successfully!", Objects.requireNonNull(actual.getBody()).getMessage());
     }
     @Test
     void editDepartmentWithDepartmentHasNotExisted_thenReturnAMessageError() {
-        Department department = new Department();
+        DepartmentRequest department = new DepartmentRequest();
         Optional<Department> departmentOptional = Optional.empty();
         when(departmentRepo.findById(1L)).thenReturn(departmentOptional);
         ResponseEntity<ResponseObject> actual = departmentService.editDepartment(department, 1L);

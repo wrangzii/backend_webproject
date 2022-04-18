@@ -1,7 +1,7 @@
 package com.project.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.web.model.Submission;
+import com.project.web.payload.request.SubmissionRequest;
 import com.project.web.service.SubmissionService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ public class SubmissionControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void addSubmissionWithInputParams_thenReturn200() throws Exception {
-        Submission submission = new Submission();
+        SubmissionRequest submission = new SubmissionRequest();
         Date date = new Date();
         submission.setSubmissionName("test");
         submission.setDescription("test");
@@ -73,7 +73,7 @@ public class SubmissionControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void addSubmissionWithoutInputParams_thenReturn() throws Exception {
-        Submission submission = new Submission();
+        SubmissionRequest submission = new SubmissionRequest();
         when(submissionService.addSubmission(submission)).thenReturn(null);
         MockHttpServletResponse response = mockMvc.perform(post("/submission/add")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -84,7 +84,7 @@ public class SubmissionControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void editSubmissionWithoutInputParams_thenReturn400() throws Exception {
-        Submission submission = new Submission();
+        SubmissionRequest submission = new SubmissionRequest();
         when(submissionService.editSubmission(submission,1L)).thenReturn(null);
         MockHttpServletResponse response = mockMvc.perform(put("/submission/edit/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -95,7 +95,7 @@ public class SubmissionControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void editSubmissionWithInputParams_thenReturn200() throws Exception {
-        Submission submission = new Submission();
+        SubmissionRequest submission = new SubmissionRequest();
         Date date = new Date();
         submission.setSubmissionName("test");
         submission.setDescription("test");

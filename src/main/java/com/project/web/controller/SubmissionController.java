@@ -1,6 +1,7 @@
 package com.project.web.controller;
 
 import com.project.web.model.Submission;
+import com.project.web.payload.request.SubmissionRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,13 @@ public class SubmissionController {
 
     @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @PostMapping("/add")
-    public ResponseEntity<ResponseObject> addSubmission(@Valid @RequestBody Submission submission) {
+    public ResponseEntity<ResponseObject> addSubmission(@Valid @RequestBody SubmissionRequest submission) {
         return submissionServ.addSubmission(submission);
     }
 
     @PreAuthorize("hasRole('QA_MANAGER') or hasRole('ADMIN')")
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseObject> editSubmission(@Valid @RequestBody Submission submission, @PathVariable Long id) {
+    public ResponseEntity<ResponseObject> editSubmission(@Valid @RequestBody SubmissionRequest submission, @PathVariable Long id) {
         return submissionServ.editSubmission(submission, id);
     }
 

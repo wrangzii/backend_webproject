@@ -1,6 +1,7 @@
 package com.project.web.service;
 
 import com.project.web.model.Submission;
+import com.project.web.payload.request.SubmissionRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.SubmissionRepository;
 import org.junit.jupiter.api.Test;
@@ -70,7 +71,7 @@ public class SubmissionServiceTest {
 
     @Test
     void addSubmissionWithSubmissionNameHasExisted_thenReturnError() {
-        Submission submission = new Submission();
+        SubmissionRequest submission = new SubmissionRequest();
         submission.setSubmissionName("test");
         when(submissionRepository.existsBySubmissionName("test")).thenReturn(true);
         ResponseEntity<ResponseObject> actual = submissionService.addSubmission(submission);
@@ -80,9 +81,10 @@ public class SubmissionServiceTest {
     @Test
     void addSubmissionWithSubmissionNameHasExisted_thenReturnAnObject() {
         Submission submission = new Submission();
+        SubmissionRequest submissionRequest = new SubmissionRequest();
         submission.setSubmissionName("test");
         when(submissionRepository.existsBySubmissionName("test")).thenReturn(false);
-        ResponseEntity<ResponseObject> actual = submissionService.addSubmission(submission);
+        ResponseEntity<ResponseObject> actual = submissionService.addSubmission(submissionRequest);
         assertEquals("Add submission successfully!", Objects.requireNonNull(actual.getBody()).getMessage());
     }
 
@@ -107,19 +109,21 @@ public class SubmissionServiceTest {
     @Test
     void editSubmissionWithSubmissionHasExisted_thenReturnAMessageSuccess() {
         Submission submission = new Submission();
+        SubmissionRequest submissionRequest = new SubmissionRequest();
         submission.setSubmissionName("test");
         Optional<Submission> submissionOptional = Optional.of(submission);
         when(submissionRepository.findById(1L)).thenReturn(submissionOptional);
-        ResponseEntity<ResponseObject> actual = submissionService.editSubmission(submission, 1L);
+        ResponseEntity<ResponseObject> actual = submissionService.editSubmission(submissionRequest, 1L);
         assertEquals("Edit submission successfully!", Objects.requireNonNull(actual.getBody()).getMessage());
     }
 
     @Test
     void editSubmissionWithSubmissionHasNotExisted_thenReturnAMessageError() {
         Submission submission = new Submission();
+        SubmissionRequest submissionRequest = new SubmissionRequest();
         Optional<Submission> submissionOptional = Optional.empty();
         when(submissionRepository.findById(1L)).thenReturn(submissionOptional);
-        ResponseEntity<ResponseObject> actual = submissionService.editSubmission(submission, 1L);
+        ResponseEntity<ResponseObject> actual = submissionService.editSubmission(submissionRequest, 1L);
         assertEquals("Error: Submission is not exist!", Objects.requireNonNull(actual.getBody()).getMessage());
     }
 }

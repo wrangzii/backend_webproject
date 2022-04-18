@@ -32,3 +32,14 @@ project:
   web:
     jwtSecret: projectWebSecretKey
     jwtExpirationMs: 9000000
+sonarqube:
+  image: sonarqube:8.9.2-community
+  container_name: sonarqube
+  platform: linux/amd64
+  restart: always
+  environment:
+    SONAR_SEARCH_JAVAADDITIONALOPTS: "-Dbootstrap.system_call_filter=false"
+  ports:
+    - '9000:9000'
+  volumes:
+    - sonarqube_extensions:/opt/sonarqube/extensions

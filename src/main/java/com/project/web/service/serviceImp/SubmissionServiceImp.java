@@ -1,6 +1,7 @@
 package com.project.web.service.serviceImp;
 
 import com.project.web.model.Submission;
+import com.project.web.payload.request.SubmissionRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.SubmissionRepository;
 import com.project.web.service.SubmissionService;
@@ -44,9 +45,14 @@ public class SubmissionServiceImp implements SubmissionService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> addSubmission(Submission submission) {
-        Boolean checkExisted = submissionRepo.existsBySubmissionName(submission.getSubmissionName());
+    public ResponseEntity<ResponseObject> addSubmission(SubmissionRequest submissionRequest) {
+        Boolean checkExisted = submissionRepo.existsBySubmissionName(submissionRequest.getSubmissionName());
+        Submission submission = new Submission();
         if (!checkExisted) {
+            submission.setSubmissionName(submissionRequest.getSubmissionName());
+            submission.setDescription(submissionRequest.getDescription());
+            submission.setClosureDate(submissionRequest.getClosureDate());
+            submission.setFinalClosureDate(submissionRequest.getFinalClosureDate());
             submissionRepo.save(submission);
             return ResponseEntity.ok(new ResponseObject(HttpStatus.CREATED.toString(),"Add submission successfully!", submission));
         }
@@ -64,7 +70,7 @@ public class SubmissionServiceImp implements SubmissionService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> editSubmission(Submission submission, Long id) {
+    public ResponseEntity<ResponseObject> editSubmission(SubmissionRequest submission, Long id) {
         Optional<Submission> editSubmission = submissionRepo.findById(id);
         if (editSubmission.isPresent()) {
             editSubmission.get().setSubmissionName(submission.getSubmissionName());

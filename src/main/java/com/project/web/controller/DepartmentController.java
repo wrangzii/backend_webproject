@@ -1,6 +1,7 @@
 package com.project.web.controller;
 
 import com.project.web.model.Department;
+import com.project.web.payload.request.DepartmentRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,13 @@ public class DepartmentController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
-    public ResponseEntity<ResponseObject> addDepartment(@Valid @RequestBody Department department) {
+    public ResponseEntity<ResponseObject> addDepartment(@Valid @RequestBody DepartmentRequest department) {
         return departmentSer.addDepartment(department);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseObject> editDepartment(@Valid @RequestBody Department department, @PathVariable Long id) {
+    public ResponseEntity<ResponseObject> editDepartment(@Valid @RequestBody DepartmentRequest department, @PathVariable Long id) {
         return departmentSer.editDepartment(department,id);
     }
 

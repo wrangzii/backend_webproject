@@ -1,9 +1,7 @@
 package com.project.web.service;
 
 import com.project.web.model.User;
-import com.project.web.payload.request.EditUserRequest;
-import com.project.web.payload.request.LoginRequest;
-import com.project.web.payload.request.SignupRequest;
+import com.project.web.payload.request.*;
 import com.project.web.payload.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
@@ -17,6 +15,6 @@ public interface UserService {
     ResponseEntity<ResponseObject> login(LoginRequest loginRequest, HttpServletResponse response);
     ResponseEntity<ResponseObject> deleteUser(Long id);
     ResponseEntity<ResponseObject> updateUser(EditUserRequest user, Long id);
-    ResponseEntity<ResponseObject> forgotPassword(User user);
-    ResponseEntity<ResponseObject> resetUserPassword(User user, String confirmationToken);
+    ResponseEntity<ResponseObject> forgotPassword(ForgotPasswordRequest user);
+    ResponseEntity<ResponseObject> resetUserPassword(ResetUserPassword user, String confirmationToken);
 }

@@ -1,6 +1,7 @@
 package com.project.web.service.serviceImp;
 
 import com.project.web.model.Department;
+import com.project.web.payload.request.DepartmentRequest;
 import com.project.web.payload.response.ResponseObject;
 import com.project.web.repository.DepartmentRepository;
 import com.project.web.service.DepartmentService;
@@ -44,9 +45,11 @@ public class DepartmentServiceImp implements DepartmentService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> addDepartment(Department department) {
-        Boolean checkExisted = departmentRepo.existsByDepartmentName(department.getDepartmentName());
+    public ResponseEntity<ResponseObject> addDepartment(DepartmentRequest departmentRequest) {
+        Boolean checkExisted = departmentRepo.existsByDepartmentName(departmentRequest.getDepartmentName());
+        Department department = new Department();
         if (!checkExisted) {
+            department.setDepartmentName(departmentRequest.getDepartmentName());
             departmentRepo.save(department);
             return ResponseEntity.ok(new ResponseObject(HttpStatus.OK.toString(),"Add department successfully!",department));
         }
@@ -64,7 +67,7 @@ public class DepartmentServiceImp implements DepartmentService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> editDepartment(Department department, Long id) {
+    public ResponseEntity<ResponseObject> editDepartment(DepartmentRequest department, Long id) {
         Optional<Department> editDepartment = departmentRepo.findById(id);
         if (editDepartment.isPresent()) {
             editDepartment.get().setDepartmentName(department.getDepartmentName());

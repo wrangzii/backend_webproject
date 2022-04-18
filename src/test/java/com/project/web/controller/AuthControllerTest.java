@@ -1,8 +1,9 @@
 package com.project.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.web.model.User;
+import com.project.web.payload.request.ForgotPasswordRequest;
 import com.project.web.payload.request.LoginRequest;
+import com.project.web.payload.request.ResetUserPassword;
 import com.project.web.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ public class AuthControllerTest {
 
     @Test
     void forgotPasswordWithParams_thenReturn200() throws Exception {
-        User user = new User();
+        ForgotPasswordRequest user = new ForgotPasswordRequest();
         user.setEmail("");
         String jsonInput = mapper.writeValueAsString(user);
         when(userService.forgotPassword(user)).thenReturn(null);
@@ -79,7 +80,7 @@ public class AuthControllerTest {
 
     @Test
     void confirmResetWithParams_thenReturn200() throws Exception {
-        User user = new User();
+        ResetUserPassword user = new ResetUserPassword();
         String jsonInput = mapper.writeValueAsString(user);
         when(userService.resetUserPassword(user,"test")).thenReturn(null);
         MockHttpServletResponse response = mockMvc.perform(post("/confirm_reset")
